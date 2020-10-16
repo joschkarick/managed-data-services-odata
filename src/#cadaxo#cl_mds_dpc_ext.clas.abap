@@ -39,11 +39,21 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
     SPLIT searchstring AT '|' INTO object_semantic_key-name object_semantic_key-type read_depth_string rest.
     read_depth = read_depth_string.
 
-    DATA(nodes) = api->get_datasources_by_semkey( i_ds_semkey  = object_semantic_key
-                                                  i_read_depth = read_depth ).
+    IF object_semantic_key IS NOT INITIAL.
+      DATA(dss) = api->get_datasources_by_semkey( i_ds_semkey  = object_semantic_key
+                                                    i_read_depth = read_depth ).
 
-    et_entityset = CORRESPONDING #( nodes MAPPING object_name = name object_type = type ).
+      LOOP AT dss ASSIGNING FIELD-SYMBOL(<ds>).
 
+        DATA(ds_api) = api->get_datasource_by_id( <ds>-ds_id ).
+
+        APPEND CORRESPONDING #( ds_api MAPPING object_name = name object_type = type ) TO et_entityset ASSIGNING FIELD-SYMBOL(<entity>).
+
+        <entity>-link = CORRESPONDING #( ds_api-api->get_action_links( ) ).
+
+      ENDLOOP.
+    ELSE.
+    ENDIF.
   ENDMETHOD.
 
 
@@ -58,15 +68,26 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
     IF navigation IS INITIAL.
       io_tech_request_context->get_converted_keys( IMPORTING es_key_values = converted_keys ).
     ELSE.
-      DATA: field TYPE /cadaxo/cl_mds_mpc=>ts_field.
-*              io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = converted_keys ).
-      io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = field ).
-*          io_tech_request_context->get_converted_keys( IMPORTING es_key_values = field ).
+      DATA: field_sm TYPE /cadaxo/cl_mds_mpc=>ts_field.
+      DATA: link_sm  TYPE /cadaxo/cl_mds_mpc=>ts_link.
+      CASE navigation[ 1 ]-source_entity_type.
+        WHEN 'Field'.
+          io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = field_sm ).
+* io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = converted_keys ).
+* io_tech_request_context->get_converted_keys( IMPORTING es_key_values = field ).
+* io_tech_request_context->get_converted_navi_target_keys( EXPORTING is_navigation_path = navigation[ 1 ]
+*                                                          IMPORTING es_key_values      = converted_keys ).
+          converted_keys = CORRESPONDING #( api->get_field_by_id( field_sm-field_id ) ).
 
-*      io_tech_request_context->get_converted_navi_target_keys( EXPORTING is_navigation_path = navigation[ 1 ]
-*                                                               IMPORTING es_key_values      = converted_keys ).
-
-      converted_keys = CORRESPONDING #( api->get_field_by_id( field-field_id ) ).
+        WHEN 'Link'.
+          io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = link_sm ).
+          CASE navigation[ 1 ]-nav_prop.
+            WHEN 'TODATASOURCE1'.
+              converted_keys = CORRESPONDING #( api->get_link_by_id( link_sm-link_id ) MAPPING ds_id = object_id1 ).
+            WHEN 'TODATASOURCE2'.
+              converted_keys = CORRESPONDING #( api->get_link_by_id( link_sm-link_id ) MAPPING ds_id = object_id2 ).
+          ENDCASE.
+      ENDCASE.
     ENDIF.
 
     DATA(nodes) = api->get_datasources_by_id( i_ds_id = converted_keys-ds_id i_read_depth = 0 ).
@@ -97,14 +118,18 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
                                                       i_read_depth = 1 ).
 
       DATA: alllinks LIKE links.
-
+      DATA: rg_used_ds TYPE RANGE OF /cadaxo/mds_ds_id.
       LOOP AT datasources ASSIGNING FIELD-SYMBOL(<datasource>).
-
+        APPEND VALUE #( sign = 'I' option = 'EQ' low = <datasource>-ds_id ) TO rg_used_ds.
         APPEND LINES OF api->get_links_by_dsid( <datasource>-ds_id ) TO alllinks.
       ENDLOOP.
 
+      DELETE alllinks WHERE object_id1 NOT IN rg_used_ds.
+      DELETE alllinks WHERE object_id2 NOT IN rg_used_ds.
+
       SORT alllinks.
       DELETE ADJACENT DUPLICATES FROM alllinks.
+
       et_entityset = CORRESPONDING #( alllinks MAPPING type = relation_type ).
 
     ELSE.
