@@ -41,7 +41,7 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
 
     IF object_semantic_key IS NOT INITIAL.
       DATA(dss) = api->get_datasources_by_semkey( i_ds_semkey  = object_semantic_key
-                                                    i_read_depth = read_depth ).
+                                                  i_read_depth = read_depth ).
 
       LOOP AT dss ASSIGNING FIELD-SYMBOL(<ds>).
 
@@ -126,6 +126,7 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
 
       DELETE alllinks WHERE object_id1 NOT IN rg_used_ds.
       DELETE alllinks WHERE object_id2 NOT IN rg_used_ds.
+      delete alllinks where object_id2 = links[ 1 ]-object_id1 and relation_type = 'ISUSED'.
 
       SORT alllinks.
       DELETE ADJACENT DUPLICATES FROM alllinks.
