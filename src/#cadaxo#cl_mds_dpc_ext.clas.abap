@@ -59,12 +59,14 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
            lv_wrong_filter            TYPE abap_bool,
            lt_filter_select_options   TYPE /iwbep/t_mgw_select_option.
 
-    CONSTANTS : lc_kind_unary    TYPE c LENGTH 1 VALUE 'U',
-                lc_kind_binary   TYPE c LENGTH 1 VALUE 'B',
-                lc_kind_literal  TYPE c LENGTH 1 VALUE 'C',
-                lc_kind_function TYPE c LENGTH 1 VALUE 'F',
-                lc_kind_member   TYPE c LENGTH 1 VALUE 'M',
-                lc_kind_property TYPE c LENGTH 1 VALUE 'P'.
+    CONSTANTS: BEGIN OF filter_node_kind,
+                 unary    TYPE c LENGTH 1 VALUE 'U',
+                 binary   TYPE c LENGTH 1 VALUE 'B',
+                 literal  TYPE c LENGTH 1 VALUE 'C',
+                 function TYPE c LENGTH 1 VALUE 'F',
+                 member   TYPE c LENGTH 1 VALUE 'M',
+                 property TYPE c LENGTH 1 VALUE 'P',
+               END OF filter_node_kind.
 
     DATA: lt_headerdata        TYPE STANDARD TABLE OF bapi_epm_product_header,
           ls_headerdata        TYPE                   bapi_epm_product_header,
@@ -96,7 +98,7 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
       lo_filter_tree = io_tech_request_context->get_filter_expression_tree( ).
 
       IF lo_filter_tree IS BOUND.
-        IF lo_filter_tree->kind = lc_kind_binary.
+        IF lo_filter_tree->kind = filter_node_kind-binary.
 
           lo_filter_tree->prepare_converted_values( ).
           lo_binary ?= lo_filter_tree.
@@ -105,7 +107,7 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
           lo_right_node = lo_binary->right_operand.
 
           IF lo_left_node IS BOUND.
-            IF lo_left_node->kind = lc_kind_function.
+            IF lo_left_node->kind = filter_node_kind-function.
 
               lo_function ?= lo_left_node.
               lv_function = lo_function->function.
@@ -119,14 +121,14 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
               IF lt_param_tab IS NOT INITIAL.
 
                 DATA(param1) = lt_param_tab[ 1 ].
-                IF param1->kind = lc_kind_literal.
+                IF param1->kind = filter_node_kind-literal.
                   lo_literal ?= param1.
                   lv_literal = lo_literal->literal_converted.
                 ELSE.
                   lv_wrong_filter = abap_true.
                 ENDIF.
                 DATA(param2) = lt_param_tab[ 2 ].
-                IF param2->kind = lc_kind_property.
+                IF param2->kind = filter_node_kind-property.
                   lo_property ?= param2.
                   lv_property = lo_property->property_name.
                 ELSE.
@@ -156,9 +158,9 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
               ELSE.
                 lv_wrong_filter = abap_true.
               ENDIF.
-            ELSEIF lo_left_node->kind = lc_kind_member.
+            ELSEIF lo_left_node->kind = filter_node_kind-member.
               lo_member ?= lo_left_node.
-              IF lo_member->path->kind = lc_kind_property.
+              IF lo_member->path->kind = filter_node_kind-property.
                 lo_property ?= lo_member->path.
                 lv_property = lo_property->property_name.
                 IF lv_property <> 'FIELD_NAME'.
@@ -166,7 +168,7 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
                   lv_wrong_filter = abap_true.
                 ENDIF.
               ENDIF.
-              IF lo_member->source_object->kind = lc_kind_property.
+              IF lo_member->source_object->kind = filter_node_kind-property.
                 lo_property ?= lo_member->source_object.
                 lv_property = lo_property->property_name.
                 IF lv_property <> 'TOFIELDS'.
@@ -191,7 +193,7 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
           CLEAR lv_property.
 
           IF lo_right_node IS BOUND.
-            IF lo_right_node->kind = lc_kind_function.
+            IF lo_right_node->kind = filter_node_kind-function.
 
               lo_function ?= lo_right_node.
               lv_function = lo_function->function.
@@ -205,7 +207,7 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
               IF lt_param_tab IS NOT INITIAL.
 
                 param1 = lt_param_tab[ 1 ].
-                IF param1->kind = lc_kind_literal.
+                IF param1->kind = filter_node_kind-literal.
                   lo_literal ?= param1.
                   lv_literal = lo_literal->literal_converted.
                 ELSE.
@@ -213,7 +215,7 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
                 ENDIF.
 
                 param2 = lt_param_tab[ 2 ].
-                IF param2->kind = lc_kind_property.
+                IF param2->kind = filter_node_kind-property.
                   lo_property ?= param2.
                   lv_property = lo_property->property_name.
                 ELSE.
@@ -243,7 +245,7 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
               ELSE.
                 lv_wrong_filter = abap_true.
               ENDIF.
-            ELSEIF lo_right_node->kind = lc_kind_literal.
+            ELSEIF lo_right_node->kind = filter_node_kind-literal.
               lo_literal ?= lo_right_node.
               lv_literal = lo_literal->literal_converted.
             ELSE.
@@ -279,19 +281,22 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
 
     IF object_semantic_key IS NOT INITIAL.
       DATA(dss) = api->get_datasources_by_semkey( i_ds_semkey        = object_semantic_key
-                                                  i_read_depth       = read_depth
                                                   i_fieldname_filter = CONV #( lv_literal ) ).
 
       LOOP AT dss ASSIGNING FIELD-SYMBOL(<ds>).
 
-        DATA(ds_api) = api->get_datasource_by_id( <ds>-ds_id ).
+*        DATA(ds_api) = api->get_datasource_by_id( <ds>-ds_id ).
 
-        APPEND CORRESPONDING #( ds_api MAPPING object_name = name object_type = type ) TO et_entityset ASSIGNING FIELD-SYMBOL(<entity>).
+        APPEND CORRESPONDING #( <ds>-api->get_datasource( ) MAPPING object_name = name object_type = type ) TO et_entityset ASSIGNING FIELD-SYMBOL(<entity>).
 
-        <entity>-link = CORRESPONDING #( ds_api-api->get_action_links( ) ).
-        <entity>-object_state = 100.
-        IF lv_literal IS NOT INITIAL AND <ds>-search_field IS INITIAL.
-          <entity>-object_state = 201.
+        <entity>-link = CORRESPONDING #( <ds>-api->get_action_links( ) ).
+        <entity>-FIELD_SEARCH = <ds>-field_search.
+
+        <entity>-object_state = SWITCH #( <ds>-role WHEN /cadaxo/if_mds_api=>ds_role-main THEN 100
+                                                    WHEN /cadaxo/if_mds_api=>ds_role-parent THEN 110
+                                                    WHEN /cadaxo/if_mds_api=>ds_role-child THEN 120 ).
+        IF lv_literal IS NOT INITIAL AND <ds>-field_search IS INITIAL.
+          <entity>-object_state = <entity>-object_state + 100.
         ENDIF.
       ENDLOOP.
 
@@ -343,10 +348,11 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
       ENDCASE.
     ENDIF.
 
-    DATA(nodes) = api->get_datasources_by_id( i_ds_id = converted_keys-ds_id i_read_depth = 0 ).
+    DATA(nodes) = api->get_datasources_by_id( i_ds_id = converted_keys-ds_id ).
+    DATA(nodeapi) = nodes[ 1 ]-api.
 
     er_entity = CORRESPONDING #( nodes[ 1 ] MAPPING object_name = name object_type = type ).
-
+    er_entity-link = nodeapi->get_action_links(  ).
   ENDMETHOD.
 
 
@@ -367,8 +373,7 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
 
     IF getall = abap_true.
 
-      DATA(datasources) = api->get_datasources_by_id( i_ds_id      = links[ 1 ]-object_id1
-                                                      i_read_depth = 1 ).
+      DATA(datasources) = api->get_datasources_by_id( i_ds_id      = links[ 1 ]-object_id1 ).
 
       DATA: alllinks LIKE links.
       DATA: rg_used_ds TYPE RANGE OF /cadaxo/mds_ds_id.
@@ -384,6 +389,11 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
       SORT alllinks.
       DELETE ADJACENT DUPLICATES FROM alllinks.
 
+      LOOP AT alllinks ASSIGNING FIELD-SYMBOL(<alllink>) WHERE relation_type <> 'ISUSED'.
+        DATA(to) = <alllink>-object_id2.
+        <alllink>-object_id2 = <alllink>-object_id1.
+        <alllink>-object_id1 = to.
+      ENDLOOP.
       et_entityset = CORRESPONDING #( alllinks MAPPING type = relation_type ).
 
     ELSE.

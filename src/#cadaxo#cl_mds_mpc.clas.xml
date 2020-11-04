@@ -115,30 +115,6 @@
     </item>
     <item>
      <ID>I</ID>
-     <KEY>019</KEY>
-     <ENTRY>DDANNOTATION_KEY</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>020</KEY>
-     <ENTRY>DDFDPOS</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>021</KEY>
-     <ENTRY>DDANNOTATION_VAL</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>022</KEY>
-     <ENTRY>OBJECT_STATE</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
      <KEY>023</KEY>
      <ENTRY>CHANGED_BY</ENTRY>
      <LENGTH>132</LENGTH>

@@ -20,6 +20,8 @@ public section.
   types:
       MANAGED type /CADAXO/MDS_OD_MANAGED. .
   types:
+      FIELDSEARCH type /CADAXO/MDS_FIELD_SEARCH. .
+  types:
      TS_DATASOURCE type /CADAXO/MDS_OD_DATASOURCE. .
   types:
 TT_DATASOURCE type standard table of TS_DATASOURCE. .
@@ -44,6 +46,7 @@ TT_PARAMETER type standard table of TS_PARAMETER. .
   constants GC_ANNOTATION type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Annotation' ##NO_TEXT.
   constants GC_DATASOURCE type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Datasource' ##NO_TEXT.
   constants GC_FIELD type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Field' ##NO_TEXT.
+  constants GC_FIELDSEARCH type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'FieldSearch' ##NO_TEXT.
   constants GC_LINK type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Link' ##NO_TEXT.
   constants GC_MANAGED type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Managed' ##NO_TEXT.
   constants GC_PARAMETER type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Parameter' ##NO_TEXT.
@@ -449,6 +452,48 @@ lo_property->set_nullable( abap_true ).
 lo_property->set_filterable( abap_false ).
 lo_complex_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_MANAGED'
                                  iv_bind_conversions = 'X' ). "#EC NOTEXT
+***********************************************************************************************************************************
+*   COMPLEX TYPE - FieldSearch
+***********************************************************************************************************************************
+lo_complex_type = model->create_complex_type( 'FieldSearch' ). "#EC NOTEXT
+
+***********************************************************************************************************************************
+*Properties
+***********************************************************************************************************************************
+lo_property = lo_complex_type->create_property( iv_property_name  = 'SearchObjectName' iv_abap_fieldname = 'SEARCH_OBJECT_NAME' ). "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 40 ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_complex_type->create_property( iv_property_name  = 'SearchFieldName' iv_abap_fieldname = 'SEARCH_FIELD_NAME' ). "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 30 ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_complex_type->create_property( iv_property_name  = 'BaseObjectName' iv_abap_fieldname = 'BASE_OBJECT_NAME' ). "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 30 ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_complex_type->create_property( iv_property_name  = 'BaseFieldName' iv_abap_fieldname = 'BASE_FIELD_NAME' ). "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 30 ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_complex_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_FIELD_SEARCH'
+                                 iv_bind_conversions = 'X' ). "#EC NOTEXT
   endmethod.
 
 
@@ -482,6 +527,9 @@ lo_entity_type = model->create_entity_type( iv_entity_type_name = 'Datasource' i
 lo_complex_type = lo_entity_type->create_complex_property( iv_property_name = 'ActionLink'
                                                            iv_complex_type_name = 'ActionLink'
                                                            iv_abap_fieldname    = 'LINK' ). "#EC NOTEXT
+lo_complex_type = lo_entity_type->create_complex_property( iv_property_name = 'FieldSearch'
+                                                           iv_complex_type_name = 'FieldSearch'
+                                                           iv_abap_fieldname    = 'FIELD_SEARCH' ). "#EC NOTEXT
 lo_complex_type = lo_entity_type->create_complex_property( iv_property_name = 'Managed'
                                                            iv_complex_type_name = 'Managed'
                                                            iv_abap_fieldname    = 'MANAGED' ). "#EC NOTEXT
@@ -811,7 +859,6 @@ lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'ParameterName' iv_abap_fieldname = 'PARAMETER_NAME' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '019' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 100 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -820,7 +867,6 @@ lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Position' iv_abap_fieldname = 'POSITION' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '020' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_int32( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -828,7 +874,6 @@ lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'Value' iv_abap_fieldname = 'VALUE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '021' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 100 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -837,7 +882,6 @@ lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'ObjectState' iv_abap_fieldname = 'OBJECT_STATE' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '022' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
 lo_property->set_type_edm_int32( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
@@ -876,7 +920,7 @@ lo_entity_set->set_filter_required( abap_false ).
 *&---------------------------------------------------------------------*
 
 
-  CONSTANTS: lc_gen_date_time TYPE timestamp VALUE '20201013051939'.                  "#EC NOTEXT
+  CONSTANTS: lc_gen_date_time TYPE timestamp VALUE '20201104215025'.                  "#EC NOTEXT
   rv_last_modified = super->get_last_modified( ).
   IF rv_last_modified LT lc_gen_date_time.
     rv_last_modified = lc_gen_date_time.
@@ -1029,36 +1073,6 @@ ls_text_element-artifact_type          = 'PROP'.                                
 ls_text_element-parent_artifact_name   = 'Annotation'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '018'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-
-
-clear ls_text_element.
-ls_text_element-artifact_name          = 'ParameterName'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'Parameter'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '019'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'Position'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'Parameter'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '020'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'Value'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'Parameter'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '021'.              "#EC NOTEXT
-APPEND ls_text_element TO rt_text_elements.
-clear ls_text_element.
-ls_text_element-artifact_name          = 'ObjectState'.                 "#EC NOTEXT
-ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
-ls_text_element-parent_artifact_name   = 'Parameter'.                            "#EC NOTEXT
-ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
-ls_text_element-text_symbol            = '022'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 
