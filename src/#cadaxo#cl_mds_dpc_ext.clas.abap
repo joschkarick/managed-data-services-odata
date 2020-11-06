@@ -285,12 +285,10 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
 
       LOOP AT dss ASSIGNING FIELD-SYMBOL(<ds>).
 
-*        DATA(ds_api) = api->get_datasource_by_id( <ds>-ds_id ).
-
         APPEND CORRESPONDING #( <ds>-api->get_datasource( ) MAPPING object_name = name object_type = type ) TO et_entityset ASSIGNING FIELD-SYMBOL(<entity>).
 
         <entity>-link = CORRESPONDING #( <ds>-api->get_action_links( ) ).
-        <entity>-FIELD_SEARCH = <ds>-field_search.
+        <entity>-field_search = <ds>-field_search.
 
         <entity>-object_state = SWITCH #( <ds>-role WHEN /cadaxo/if_mds_api=>ds_role-main THEN 100
                                                     WHEN /cadaxo/if_mds_api=>ds_role-parent THEN 110
@@ -300,17 +298,8 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
         ENDIF.
       ENDLOOP.
 
-*      IF lv_literal IS NOT INITIAL.
-*        LOOP AT et_entityset ASSIGNING FIELD-SYMBOL(<entityset>).
-*          IF sy-tabix MOD 2 = 0.
-*            <entityset>-object_state = 222.
-*          ELSE.
-*            <entityset>-object_state = 111.
-*          ENDIF.
-*        ENDLOOP.
-*      ENDIF.
-
     ELSE.
+
     ENDIF.
   ENDMETHOD.
 
@@ -384,7 +373,6 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
 
       DELETE alllinks WHERE object_id1 NOT IN rg_used_ds.
       DELETE alllinks WHERE object_id2 NOT IN rg_used_ds.
-      DELETE alllinks WHERE object_id2 = links[ 1 ]-object_id1 AND relation_type = 'ISUSED'.
 
       SORT alllinks.
       DELETE ADJACENT DUPLICATES FROM alllinks.
