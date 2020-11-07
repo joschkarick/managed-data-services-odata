@@ -17,6 +17,8 @@ CLASS /cadaxo/cl_mds_dpc_ext DEFINITION
     METHODS annotations_get_entity REDEFINITION.
     METHODS parameters_get_entityset REDEFINITION.
     METHODS parameters_get_entity REDEFINITION.
+    METHODS properties_get_entityset REDEFINITION.
+    METHODS properties_get_entity REDEFINITION.
   PRIVATE SECTION.
     CLASS-DATA: api TYPE REF TO /cadaxo/if_mds_api.
 ENDCLASS.
@@ -317,6 +319,8 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
     ELSE.
       DATA: field_sm TYPE /cadaxo/cl_mds_mpc=>ts_field.
       DATA: link_sm  TYPE /cadaxo/cl_mds_mpc=>ts_link.
+      DATA: parameter_sm  TYPE /cadaxo/cl_mds_mpc=>ts_parameter.
+      DATA: property_sm  TYPE /cadaxo/cl_mds_mpc=>ts_property.
       CASE navigation[ 1 ]-source_entity_type.
         WHEN 'Field'.
           io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = field_sm ).
@@ -327,6 +331,7 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
           converted_keys = CORRESPONDING #( api->get_field_by_id( field_sm-field_id ) ).
 
         WHEN 'Link'.
+
           io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = link_sm ).
           CASE navigation[ 1 ]-nav_prop.
             WHEN 'TODATASOURCE1'.
@@ -334,6 +339,17 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
             WHEN 'TODATASOURCE2'.
               converted_keys = CORRESPONDING #( api->get_link_by_id( link_sm-link_id ) MAPPING ds_id = object_id2 ).
           ENDCASE.
+
+        WHEN 'Parameter'.
+
+          io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = parameter_sm ).
+          converted_keys = CORRESPONDING #( api->get_parameter_by_id( parameter_sm-parameter_id ) ).
+
+        WHEN 'Property'.
+
+          io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = property_sm ).
+          converted_keys = CORRESPONDING #( api->get_property_by_id( property_sm-property_id ) ).
+
       ENDCASE.
     ENDIF.
 
@@ -481,10 +497,59 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
 
   METHOD parameters_get_entityset.
 
+    DATA converted_keys TYPE /cadaxo/cl_mds_mpc_ext=>ts_datasource.
+
+    io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = converted_keys ).
+
+    DATA(parameters) = api->get_parameters_by_dsid( i_ds_id = converted_keys-ds_id ).
+
+    LOOP AT parameters ASSIGNING FIELD-SYMBOL(<parameter>).
+      APPEND CORRESPONDING #( <parameter> )  TO et_entityset.
+    ENDLOOP.
+
   ENDMETHOD.
 
 
   METHOD parameters_get_entity.
+
+    DATA converted_keys LIKE er_entity.
+
+    io_tech_request_context->get_converted_keys( IMPORTING es_key_values = converted_keys ).
+
+    DATA(parameter) = api->get_parameter_by_id( converted_keys-parameter_id ).
+
+    er_entity = CORRESPONDING #( parameter ).
+
+  ENDMETHOD.
+
+  METHOD properties_get_entityset.
+
+    CASE iv_source_name.
+      WHEN 'Datasource'.
+        DATA ds_keys TYPE /cadaxo/cl_mds_mpc_ext=>ts_datasource.
+        io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = ds_keys ).
+        DATA(properties) = api->get_properties_by_dsid( ds_keys-ds_id ).
+
+      WHEN 'Field'.
+        DATA field_keys TYPE /cadaxo/cl_mds_mpc_ext=>ts_field.
+        io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = field_keys ).
+        properties = api->get_properties_by_fieldid( field_keys-field_id ).
+
+    ENDCASE.
+
+    et_entityset = CORRESPONDING #( properties ).
+
+  ENDMETHOD.
+
+  METHOD properties_get_entity.
+
+    DATA converted_keys LIKE er_entity.
+
+    io_tech_request_context->get_converted_keys( IMPORTING es_key_values = converted_keys ).
+
+    DATA(property) = api->get_property_by_id( converted_keys-property_id ).
+
+    er_entity = CORRESPONDING #( property ).
 
   ENDMETHOD.
 

@@ -41,6 +41,10 @@ TT_ANNOTATION type standard table of TS_ANNOTATION. .
      TS_PARAMETER type /CADAXO/MDS_OD_PARAMETER. .
   types:
 TT_PARAMETER type standard table of TS_PARAMETER. .
+  types:
+     TS_PROPERTY type /CADAXO/MDS_OD_PROPERTY. .
+  types:
+TT_PROPERTY type standard table of TS_PROPERTY. .
 
   constants GC_ACTIONLINK type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'ActionLink' ##NO_TEXT.
   constants GC_ANNOTATION type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Annotation' ##NO_TEXT.
@@ -50,6 +54,7 @@ TT_PARAMETER type standard table of TS_PARAMETER. .
   constants GC_LINK type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Link' ##NO_TEXT.
   constants GC_MANAGED type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Managed' ##NO_TEXT.
   constants GC_PARAMETER type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Parameter' ##NO_TEXT.
+  constants GC_PROPERTY type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Property' ##NO_TEXT.
 
   methods LOAD_TEXT_ELEMENTS
   final
@@ -85,6 +90,9 @@ private section.
   methods DEFINE_PARAMETER
     raising
       /IWBEP/CX_MGW_MED_EXCEPTION .
+  methods DEFINE_PROPERTY
+    raising
+      /IWBEP/CX_MGW_MED_EXCEPTION .
   methods DEFINE_ASSOCIATIONS
     raising
       /IWBEP/CX_MGW_MED_EXCEPTION .
@@ -112,6 +120,7 @@ define_link( ).
 define_field( ).
 define_annotation( ).
 define_parameter( ).
+define_property( ).
 define_associations( ).
   endmethod.
 
@@ -268,21 +277,6 @@ lo_assoc_set = model->create_association_set( iv_association_set_name  = 'toFiel
 lo_ref_constraint = lo_association->create_ref_constraint( ).
 lo_ref_constraint->add_property( iv_principal_property = 'FieldId'   iv_dependent_property = 'AnnotationId' ). "#EC NOTEXT
  lo_association = model->create_association(
-                            iv_association_name = 'toFieldParameters' "#EC NOTEXT
-                            iv_left_type        = 'Field' "#EC NOTEXT
-                            iv_right_type       = 'Parameter' "#EC NOTEXT
-                            iv_right_card       = 'M' "#EC NOTEXT
-                            iv_left_card        = '1'  "#EC NOTEXT
-                            iv_def_assoc_set    = abap_false ). "#EC NOTEXT
-* Referential constraint for association - toFieldParameters
-lo_ref_constraint = lo_association->create_ref_constraint( ).
-lo_ref_constraint->add_property( iv_principal_property = 'FieldId'   iv_dependent_property = 'ObjectId' ). "#EC NOTEXT
-lo_assoc_set = model->create_association_set( iv_association_set_name  = 'toFieldParametersSet'                         "#EC NOTEXT
-                                              iv_left_entity_set_name  = 'Fields'              "#EC NOTEXT
-                                              iv_right_entity_set_name = 'Parameters'             "#EC NOTEXT
-                                              iv_association_name      = 'toFieldParameters' ).                                 "#EC NOTEXT
-
- lo_association = model->create_association(
                             iv_association_name = 'toDatasourceParameters' "#EC NOTEXT
                             iv_left_type        = 'Datasource' "#EC NOTEXT
                             iv_right_type       = 'Parameter' "#EC NOTEXT
@@ -291,7 +285,7 @@ lo_assoc_set = model->create_association_set( iv_association_set_name  = 'toFiel
                             iv_def_assoc_set    = abap_false ). "#EC NOTEXT
 * Referential constraint for association - toDatasourceParameters
 lo_ref_constraint = lo_association->create_ref_constraint( ).
-lo_ref_constraint->add_property( iv_principal_property = 'DsId'   iv_dependent_property = 'ObjectId' ). "#EC NOTEXT
+lo_ref_constraint->add_property( iv_principal_property = 'DsId'   iv_dependent_property = 'DsId' ). "#EC NOTEXT
 lo_assoc_set = model->create_association_set( iv_association_set_name  = 'toDatasourceParametersSet'                         "#EC NOTEXT
                                               iv_left_entity_set_name  = 'Datasources'              "#EC NOTEXT
                                               iv_right_entity_set_name = 'Parameters'             "#EC NOTEXT
@@ -327,6 +321,36 @@ lo_assoc_set = model->create_association_set( iv_association_set_name  = 'toLink
                                               iv_right_entity_set_name = 'Links'             "#EC NOTEXT
                                               iv_association_name      = 'toLinks' ).                                 "#EC NOTEXT
 
+ lo_association = model->create_association(
+                            iv_association_name = 'toFieldProperties' "#EC NOTEXT
+                            iv_left_type        = 'Field' "#EC NOTEXT
+                            iv_right_type       = 'Property' "#EC NOTEXT
+                            iv_right_card       = 'M' "#EC NOTEXT
+                            iv_left_card        = '1'  "#EC NOTEXT
+                            iv_def_assoc_set    = abap_false ). "#EC NOTEXT
+* Referential constraint for association - toFieldProperties
+lo_ref_constraint = lo_association->create_ref_constraint( ).
+lo_ref_constraint->add_property( iv_principal_property = 'FieldId'   iv_dependent_property = 'ObjectId' ). "#EC NOTEXT
+lo_assoc_set = model->create_association_set( iv_association_set_name  = 'toFieldPropertiesSet'                         "#EC NOTEXT
+                                              iv_left_entity_set_name  = 'Fields'              "#EC NOTEXT
+                                              iv_right_entity_set_name = 'Properties'             "#EC NOTEXT
+                                              iv_association_name      = 'toFieldProperties' ).                                 "#EC NOTEXT
+
+ lo_association = model->create_association(
+                            iv_association_name = 'toDatasourceProperties' "#EC NOTEXT
+                            iv_left_type        = 'Datasource' "#EC NOTEXT
+                            iv_right_type       = 'Property' "#EC NOTEXT
+                            iv_right_card       = 'M' "#EC NOTEXT
+                            iv_left_card        = '1'  "#EC NOTEXT
+                            iv_def_assoc_set    = abap_false ). "#EC NOTEXT
+* Referential constraint for association - toDatasourceProperties
+lo_ref_constraint = lo_association->create_ref_constraint( ).
+lo_ref_constraint->add_property( iv_principal_property = 'DsId'   iv_dependent_property = 'ObjectId' ). "#EC NOTEXT
+lo_assoc_set = model->create_association_set( iv_association_set_name  = 'toDatasourcePropertiesSet'                         "#EC NOTEXT
+                                              iv_left_entity_set_name  = 'Datasources'              "#EC NOTEXT
+                                              iv_right_entity_set_name = 'Properties'             "#EC NOTEXT
+                                              iv_association_name      = 'toDatasourceProperties' ).                                 "#EC NOTEXT
+
 
 ***********************************************************************************************************************************
 *   NAVIGATION PROPERTIES
@@ -349,6 +373,9 @@ lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  
 lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toAllLinks' "#EC NOTEXT
                                                               iv_abap_fieldname = 'TOALLLINKS' "#EC NOTEXT
                                                               iv_association_name = 'toLinks' ). "#EC NOTEXT
+lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toProperties' "#EC NOTEXT
+                                                              iv_abap_fieldname = 'TOPROPERTIES' "#EC NOTEXT
+                                                              iv_association_name = 'toDatasourceProperties' ). "#EC NOTEXT
 * Navigation Properties for entity - Link
 lo_entity_type = model->get_entity_type( iv_entity_name = 'Link' ). "#EC NOTEXT
 lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toDatasource2' "#EC NOTEXT
@@ -362,9 +389,9 @@ lo_entity_type = model->get_entity_type( iv_entity_name = 'Field' ). "#EC NOTEXT
 lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toAnnotations' "#EC NOTEXT
                                                               iv_abap_fieldname = 'TOANNOTATIONS' "#EC NOTEXT
                                                               iv_association_name = 'toFieldAnnotations' ). "#EC NOTEXT
-lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toParameters' "#EC NOTEXT
-                                                              iv_abap_fieldname = 'TOPARAMETERS' "#EC NOTEXT
-                                                              iv_association_name = 'toFieldParameters' ). "#EC NOTEXT
+lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toProperties' "#EC NOTEXT
+                                                              iv_abap_fieldname = 'TOPROPERTIES' "#EC NOTEXT
+                                                              iv_association_name = 'toFieldProperties' ). "#EC NOTEXT
 lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toDatasource' "#EC NOTEXT
                                                               iv_abap_fieldname = 'TODATASOURCE' "#EC NOTEXT
                                                               iv_association_name = 'toFields' ). "#EC NOTEXT
@@ -375,12 +402,17 @@ lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  
                                                               iv_association_name = 'toFieldAnnotations' ). "#EC NOTEXT
 * Navigation Properties for entity - Parameter
 lo_entity_type = model->get_entity_type( iv_entity_name = 'Parameter' ). "#EC NOTEXT
-lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toField' "#EC NOTEXT
-                                                              iv_abap_fieldname = 'TOFIELD' "#EC NOTEXT
-                                                              iv_association_name = 'toFieldParameters' ). "#EC NOTEXT
 lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toDatasource' "#EC NOTEXT
                                                               iv_abap_fieldname = 'TODATASOURCE' "#EC NOTEXT
                                                               iv_association_name = 'toDatasourceParameters' ). "#EC NOTEXT
+* Navigation Properties for entity - Property
+lo_entity_type = model->get_entity_type( iv_entity_name = 'Property' ). "#EC NOTEXT
+lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toField' "#EC NOTEXT
+                                                              iv_abap_fieldname = 'TOFIELD' "#EC NOTEXT
+                                                              iv_association_name = 'toFieldProperties' ). "#EC NOTEXT
+lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toDatasource' "#EC NOTEXT
+                                                              iv_abap_fieldname = 'TODATASOURCE' "#EC NOTEXT
+                                                              iv_association_name = 'toDatasourceProperties' ). "#EC NOTEXT
   endmethod.
 
 
@@ -850,7 +882,7 @@ lo_property->set_updatable( abap_false ).
 lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
-lo_property = lo_entity_type->create_property( iv_property_name = 'ObjectId' iv_abap_fieldname = 'OBJECT_ID' ). "#EC NOTEXT
+lo_property = lo_entity_type->create_property( iv_property_name = 'DsId' iv_abap_fieldname = 'DS_ID' ). "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
@@ -860,7 +892,128 @@ lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'ParameterName' iv_abap_fieldname = 'PARAMETER_NAME' ). "#EC NOTEXT
 lo_property->set_type_edm_string( ).
-lo_property->set_maxlength( iv_max_length = 100 ). "#EC NOTEXT
+lo_property->set_maxlength( iv_max_length = 256 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Position' iv_abap_fieldname = 'POSITION' ). "#EC NOTEXT
+lo_property->set_type_edm_int32( ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Description' iv_abap_fieldname = 'DESCRIPTION' ). "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 60 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'ObjectState' iv_abap_fieldname = 'OBJECT_STATE' ). "#EC NOTEXT
+lo_property->set_type_edm_int32( ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Datatype' iv_abap_fieldname = 'DATATYPE' ). "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
+lo_property->set_conversion_exit( 'DTYPE' ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Length' iv_abap_fieldname = 'LENGTH' ). "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 12 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'DataElement' iv_abap_fieldname = 'DATA_ELEMENT' ). "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 30 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+
+lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_PARAMETER'
+                                iv_bind_conversions = 'X' ). "#EC NOTEXT
+
+
+***********************************************************************************************************************************
+*   ENTITY SETS
+***********************************************************************************************************************************
+lo_entity_set = lo_entity_type->create_entity_set( 'Parameters' ). "#EC NOTEXT
+
+lo_entity_set->set_creatable( abap_false ).
+lo_entity_set->set_updatable( abap_false ).
+lo_entity_set->set_deletable( abap_false ).
+
+lo_entity_set->set_pageable( abap_false ).
+lo_entity_set->set_addressable( abap_false ).
+lo_entity_set->set_has_ftxt_search( abap_false ).
+lo_entity_set->set_subscribable( abap_false ).
+lo_entity_set->set_filter_required( abap_false ).
+  endmethod.
+
+
+  method DEFINE_PROPERTY.
+*&---------------------------------------------------------------------*
+*&           Generated code for the MODEL PROVIDER BASE CLASS         &*
+*&                                                                     &*
+*&  !!!NEVER MODIFY THIS CLASS. IN CASE YOU WANT TO CHANGE THE MODEL  &*
+*&        DO THIS IN THE MODEL PROVIDER SUBCLASS!!!                   &*
+*&                                                                     &*
+*&---------------------------------------------------------------------*
+
+
+  data:
+        lo_annotation     type ref to /iwbep/if_mgw_odata_annotation,                "#EC NEEDED
+        lo_entity_type    type ref to /iwbep/if_mgw_odata_entity_typ,                "#EC NEEDED
+        lo_complex_type   type ref to /iwbep/if_mgw_odata_cmplx_type,                "#EC NEEDED
+        lo_property       type ref to /iwbep/if_mgw_odata_property,                  "#EC NEEDED
+        lo_entity_set     type ref to /iwbep/if_mgw_odata_entity_set.                "#EC NEEDED
+
+***********************************************************************************************************************************
+*   ENTITY - Property
+***********************************************************************************************************************************
+
+lo_entity_type = model->create_entity_type( iv_entity_type_name = 'Property' iv_def_entity_set = abap_false ). "#EC NOTEXT
+
+***********************************************************************************************************************************
+*Properties
+***********************************************************************************************************************************
+
+lo_property = lo_entity_type->create_property( iv_property_name = 'PropertyId' iv_abap_fieldname = 'PROPERTY_ID' ). "#EC NOTEXT
+lo_property->set_is_key( ).
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'ObjectId' iv_abap_fieldname = 'OBJECT_ID' ). "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'PropertyName' iv_abap_fieldname = 'PROPERTY_NAME' ). "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 256 ). "#EC NOTEXT
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
 lo_property->set_sortable( abap_false ).
@@ -889,14 +1042,14 @@ lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 
-lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_PARAMETER'
+lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_PROPERTY'
                                 iv_bind_conversions = 'X' ). "#EC NOTEXT
 
 
 ***********************************************************************************************************************************
 *   ENTITY SETS
 ***********************************************************************************************************************************
-lo_entity_set = lo_entity_type->create_entity_set( 'Parameters' ). "#EC NOTEXT
+lo_entity_set = lo_entity_type->create_entity_set( 'Properties' ). "#EC NOTEXT
 
 lo_entity_set->set_creatable( abap_false ).
 lo_entity_set->set_updatable( abap_false ).
@@ -920,7 +1073,7 @@ lo_entity_set->set_filter_required( abap_false ).
 *&---------------------------------------------------------------------*
 
 
-  CONSTANTS: lc_gen_date_time TYPE timestamp VALUE '20201104215025'.                  "#EC NOTEXT
+  CONSTANTS: lc_gen_date_time TYPE timestamp VALUE '20201107174429'.                  "#EC NOTEXT
   rv_last_modified = super->get_last_modified( ).
   IF rv_last_modified LT lc_gen_date_time.
     rv_last_modified = lc_gen_date_time.
