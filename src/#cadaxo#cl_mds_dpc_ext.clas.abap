@@ -21,6 +21,10 @@ CLASS /cadaxo/cl_mds_dpc_ext DEFINITION
     METHODS properties_get_entity REDEFINITION.
   PRIVATE SECTION.
     CLASS-DATA: api TYPE REF TO /cadaxo/if_mds_api.
+    METHODS parse_fieldname_filter IMPORTING io_tech_request_context   TYPE REF TO /iwbep/if_mgw_req_entityset
+                                   RETURNING VALUE(r_filter_fieldname) TYPE string
+                                   RAISING   /iwbep/cx_mgw_busi_exception
+                                             /iwbep/cx_mgw_tech_exception.
 ENDCLASS.
 
 
@@ -33,257 +37,20 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
 
   METHOD datasources_get_entityset.
     DATA: object_semantic_key TYPE /cadaxo/mds_ds_semkey.
-    DATA: read_depth_string TYPE string.
-    DATA: read_depth TYPE i.
     DATA: rest TYPE c.
 
     DATA(searchstring) = cl_http_utility=>unescape_url( iv_search_string ).
-    SPLIT searchstring AT '|' INTO object_semantic_key-name object_semantic_key-type read_depth_string rest.
-    read_depth = read_depth_string.
-**********************************************************************
+    SPLIT searchstring AT '|' INTO object_semantic_key-name object_semantic_key-type rest.
 
-    DATA : lo_filter_tree             TYPE REF TO /iwbep/if_mgw_expr_node,
-           lo_left_node               TYPE REF TO /iwbep/if_mgw_expr_node,
-           lo_right_node              TYPE REF TO /iwbep/if_mgw_expr_node,
-           lo_binary                  TYPE REF TO /iwbep/if_mgw_expr_binary,
-           lo_function                TYPE REF TO /iwbep/if_mgw_expr_function,
-           lo_property                TYPE REF TO /iwbep/if_mgw_expr_property,
-           lo_literal                 TYPE REF TO /iwbep/if_mgw_expr_literal,
-           lo_member                  TYPE REF TO /iwbep/if_mgw_expr_member,
-           lt_param_tab               TYPE /iwbep/if_mgw_expr_function=>parameter_t,
-           ls_param_tab               TYPE LINE OF /iwbep/if_mgw_expr_function=>parameter_t,
-           lv_operator                TYPE string,
-           lv_function                TYPE string,
-           lv_literal                 TYPE string,
-           lv_property                TYPE string,
-           lv_supported_filter_string TYPE string,
-           lv_filter_error            TYPE string,
-           lv_wrong_filter            TYPE abap_bool,
-           lt_filter_select_options   TYPE /iwbep/t_mgw_select_option.
+    DATA(search_4_field) = parse_fieldname_filter( io_tech_request_context ).
 
-    CONSTANTS: BEGIN OF filter_node_kind,
-                 unary    TYPE c LENGTH 1 VALUE 'U',
-                 binary   TYPE c LENGTH 1 VALUE 'B',
-                 literal  TYPE c LENGTH 1 VALUE 'C',
-                 function TYPE c LENGTH 1 VALUE 'F',
-                 member   TYPE c LENGTH 1 VALUE 'M',
-                 property TYPE c LENGTH 1 VALUE 'P',
-               END OF filter_node_kind.
-
-    DATA: lt_headerdata        TYPE STANDARD TABLE OF bapi_epm_product_header,
-          ls_headerdata        TYPE                   bapi_epm_product_header,
-          ls_entity            LIKE LINE OF           et_entityset,
-          lt_product_id        TYPE TABLE OF          bapi_epm_product_id_range,
-          ls_product_id        TYPE                   bapi_epm_product_id_range,
-          lt_supplier_name     TYPE TABLE OF          bapi_epm_supplier_name_range,
-          ls_supplier_name     TYPE                   bapi_epm_supplier_name_range,
-          lt_category          TYPE TABLE OF          bapi_epm_product_categ_range,
-          ls_category          TYPE                   bapi_epm_product_categ_range,
-          lt_return            TYPE TABLE OF          bapiret2,
-          lo_message_container TYPE REF TO            /iwbep/if_message_container.
-
-
-
-    lv_wrong_filter = abap_false.
-
-    lv_supported_filter_string = 'Only the following filterstring is supported: substringof(<some string>,SupplierName) or substringof(<some string>,ProductID)'.
-
-
-    lt_filter_select_options = io_tech_request_context->get_filter( )->get_filter_select_options( ).
-
-    IF lt_filter_select_options IS NOT INITIAL.
-
-      "implement coding to retrieve data via select options
-
-    ELSE.
-
-      lo_filter_tree = io_tech_request_context->get_filter_expression_tree( ).
-
-      IF lo_filter_tree IS BOUND.
-        IF lo_filter_tree->kind = filter_node_kind-binary.
-
-          lo_filter_tree->prepare_converted_values( ).
-          lo_binary ?= lo_filter_tree.
-          lv_operator = lo_binary->operator.
-          lo_left_node  = lo_binary->left_operand.
-          lo_right_node = lo_binary->right_operand.
-
-          IF lo_left_node IS BOUND.
-            IF lo_left_node->kind = filter_node_kind-function.
-
-              lo_function ?= lo_left_node.
-              lv_function = lo_function->function.
-              IF lv_function <> 'substringof'.
-                lv_filter_error = 'Only substringof is supported. '.
-                lv_wrong_filter = abap_true.
-              ENDIF.
-
-              lt_param_tab = lo_function->parameters.
-
-              IF lt_param_tab IS NOT INITIAL.
-
-                DATA(param1) = lt_param_tab[ 1 ].
-                IF param1->kind = filter_node_kind-literal.
-                  lo_literal ?= param1.
-                  lv_literal = lo_literal->literal_converted.
-                ELSE.
-                  lv_wrong_filter = abap_true.
-                ENDIF.
-                DATA(param2) = lt_param_tab[ 2 ].
-                IF param2->kind = filter_node_kind-property.
-                  lo_property ?= param2.
-                  lv_property = lo_property->property_name.
-                ELSE.
-                  lv_wrong_filter = abap_true.
-                ENDIF.
-
-                IF lv_property = 'FIELD_NAME'.
-
-                  ls_supplier_name-sign  = 'I'.
-                  ls_supplier_name-option  ='CP'.
-                  ls_supplier_name-low  = '*' && lv_literal && '*'.
-                  APPEND ls_supplier_name TO lt_supplier_name.
-
-                ELSEIF lv_property = 'FIELDNAME'.
-
-                  ls_product_id-sign  = 'I'.
-                  ls_product_id-option  ='CP'.
-                  ls_product_id-low  = '*' && lv_literal && '*'.
-                  APPEND ls_product_id TO lt_product_id.
-
-                ELSE.
-                  " raise error message that filter string does not match the expected format
-                  " an additional property was found in the filter string
-                  lv_filter_error = 'Property:' && lv_property && ' is not supported. '.
-                  lv_wrong_filter = abap_true.
-                ENDIF.
-              ELSE.
-                lv_wrong_filter = abap_true.
-              ENDIF.
-            ELSEIF lo_left_node->kind = filter_node_kind-member.
-              lo_member ?= lo_left_node.
-              IF lo_member->path->kind = filter_node_kind-property.
-                lo_property ?= lo_member->path.
-                lv_property = lo_property->property_name.
-                IF lv_property <> 'FIELD_NAME'.
-                  lv_filter_error = ' Only Filter Property FIELD_NAME is supported'.
-                  lv_wrong_filter = abap_true.
-                ENDIF.
-              ENDIF.
-              IF lo_member->source_object->kind = filter_node_kind-property.
-                lo_property ?= lo_member->source_object.
-                lv_property = lo_property->property_name.
-                IF lv_property <> 'TOFIELDS'.
-                  lv_filter_error = ' Only Navigation Property TOFIELDS is supported'.
-                  lv_wrong_filter = abap_true.
-                ENDIF.
-              ENDIF.
-
-            ELSE.
-              lv_wrong_filter = abap_true.
-            ENDIF.
-          ENDIF.
-
-          CLEAR lo_function.
-          CLEAR lo_property.
-          CLEAR lo_literal.
-          CLEAR lt_param_tab.
-          CLEAR ls_param_tab.
-          CLEAR lv_operator.
-          CLEAR lv_function.
-          CLEAR lv_literal.
-          CLEAR lv_property.
-
-          IF lo_right_node IS BOUND.
-            IF lo_right_node->kind = filter_node_kind-function.
-
-              lo_function ?= lo_right_node.
-              lv_function = lo_function->function.
-              IF lv_function <> 'substringof'.
-                lv_filter_error = 'Only substringof is supported. '.
-                lv_wrong_filter = abap_true.
-              ENDIF.
-
-              lt_param_tab = lo_function->parameters.
-
-              IF lt_param_tab IS NOT INITIAL.
-
-                param1 = lt_param_tab[ 1 ].
-                IF param1->kind = filter_node_kind-literal.
-                  lo_literal ?= param1.
-                  lv_literal = lo_literal->literal_converted.
-                ELSE.
-                  lv_wrong_filter = abap_true.
-                ENDIF.
-
-                param2 = lt_param_tab[ 2 ].
-                IF param2->kind = filter_node_kind-property.
-                  lo_property ?= param2.
-                  lv_property = lo_property->property_name.
-                ELSE.
-                  lv_wrong_filter = abap_true.
-                ENDIF.
-
-                IF lv_property = 'SUPPLIER_NAME'.
-
-                  ls_supplier_name-sign  = 'I'.
-                  ls_supplier_name-option  ='CP'.
-                  ls_supplier_name-low  = '*' && lv_literal && '*'.
-                  APPEND ls_supplier_name TO lt_supplier_name.
-
-                ELSEIF lv_property = 'PRODUCT_ID'.
-
-                  ls_product_id-sign  = 'I'.
-                  ls_product_id-option  ='CP'.
-                  ls_product_id-low  = '*' && lv_literal && '*'.
-                  APPEND ls_product_id TO lt_product_id.
-
-                ELSE.
-                  " raise error message that filter string does not match the expected format
-                  " an additional property was found in the filter string
-                  lv_filter_error = 'Property:' && lv_property && ' is not supported. '.
-                  lv_wrong_filter = abap_true.
-                ENDIF.
-              ELSE.
-                lv_wrong_filter = abap_true.
-              ENDIF.
-            ELSEIF lo_right_node->kind = filter_node_kind-literal.
-              lo_literal ?= lo_right_node.
-              lv_literal = lo_literal->literal_converted.
-            ELSE.
-              lv_wrong_filter = abap_true.
-            ENDIF.
-          ENDIF.
-
-        ELSE.
-          lv_filter_error = ' Filter is not binary. '.
-          lv_wrong_filter = abap_true.
-        ENDIF.
-
-
-
-      ENDIF.
-
-      IF lv_wrong_filter = abap_true.
-
-        RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
-          EXPORTING
-            textid            = /iwbep/cx_mgw_busi_exception=>business_error_unlimited
-            message_unlimited = lv_filter_error && lv_supported_filter_string.
-
-      ENDIF.
-    ENDIF.
-
-
-
-**********************************************************************
     DATA(filter) = io_tech_request_context->get_filter( ).
     DATA(filter_so) = filter->get_filter_select_options( ).
 
 
     IF object_semantic_key IS NOT INITIAL.
       DATA(dss) = api->get_datasources_by_semkey( i_ds_semkey        = object_semantic_key
-                                                  i_fieldname_filter = CONV #( lv_literal ) ).
+                                                  i_fieldname_filter = CONV #( search_4_field ) ).
 
       LOOP AT dss ASSIGNING FIELD-SYMBOL(<ds>).
 
@@ -295,7 +62,7 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
         <entity>-object_state = SWITCH #( <ds>-role WHEN /cadaxo/if_mds_api=>ds_role-main THEN 100
                                                     WHEN /cadaxo/if_mds_api=>ds_role-parent THEN 110
                                                     WHEN /cadaxo/if_mds_api=>ds_role-child THEN 120 ).
-        IF lv_literal IS NOT INITIAL AND <ds>-field_search IS INITIAL.
+        IF search_4_field IS NOT INITIAL AND <ds>-field_search IS INITIAL.
           <entity>-object_state = <entity>-object_state + 100.
         ENDIF.
       ENDLOOP.
@@ -303,6 +70,225 @@ CLASS /cadaxo/cl_mds_dpc_ext IMPLEMENTATION.
     ELSE.
 
     ENDIF.
+  ENDMETHOD.
+
+  METHOD parse_fieldname_filter.
+
+    CONSTANTS: BEGIN OF filter_node_kind,
+                 unary    TYPE c LENGTH 1 VALUE 'U',
+                 binary   TYPE c LENGTH 1 VALUE 'B',
+                 literal  TYPE c LENGTH 1 VALUE 'C',
+                 function TYPE c LENGTH 1 VALUE 'F',
+                 member   TYPE c LENGTH 1 VALUE 'M',
+                 property TYPE c LENGTH 1 VALUE 'P',
+               END OF filter_node_kind.
+
+    DATA: filter_tree             TYPE REF TO /iwbep/if_mgw_expr_node.
+    DATA: left_node               TYPE REF TO /iwbep/if_mgw_expr_node.
+    DATA: right_node              TYPE REF TO /iwbep/if_mgw_expr_node.
+    DATA: binary                  TYPE REF TO /iwbep/if_mgw_expr_binary.
+    DATA: function                TYPE REF TO /iwbep/if_mgw_expr_function.
+    DATA: property                TYPE REF TO /iwbep/if_mgw_expr_property.
+    DATA: literal                 TYPE REF TO /iwbep/if_mgw_expr_literal.
+    DATA: member                  TYPE REF TO /iwbep/if_mgw_expr_member.
+    DATA: function_parameters     TYPE /iwbep/if_mgw_expr_function=>parameter_t.
+    DATA: operator_name           TYPE string.
+    DATA: function_name           TYPE string.
+    DATA: property_name           TYPE string.
+    DATA: supported_filter_string TYPE string.
+    DATA: filter_error            TYPE string.
+    DATA: wrong_filter            TYPE abap_bool.
+    DATA: filter_select_options   TYPE /iwbep/t_mgw_select_option.
+
+
+
+    wrong_filter = abap_false.
+
+    supported_filter_string = |Only the following filterstring is supported: FieldSearch/SearchFieldName eq '<Fieldname>'|.
+
+    filter_select_options = io_tech_request_context->get_filter( )->get_filter_select_options( ).
+
+    IF filter_select_options IS NOT INITIAL.
+
+      TRY.
+          r_filter_fieldname = filter_select_options[ property = 'FIELD_SEARCH-SEARCH_FIELD_NAME' ]-select_options[ sign = 'I' option = 'EQ'  ]-low.
+        CATCH cx_sy_itab_line_not_found.
+          wrong_filter = abap_true.
+      ENDTRY.
+
+    ELSE.
+
+      RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+        EXPORTING
+          textid            = /iwbep/cx_mgw_busi_exception=>business_error_unlimited
+          message_unlimited = filter_error && supported_filter_string.
+
+      filter_tree = io_tech_request_context->get_filter_expression_tree( ).
+
+      IF filter_tree IS BOUND.
+        IF filter_tree->kind = filter_node_kind-binary.
+
+          filter_tree->prepare_converted_values( ).
+          binary ?= filter_tree.
+          operator_name = binary->operator.
+          left_node  = binary->left_operand.
+          right_node = binary->right_operand.
+
+          IF left_node IS BOUND.
+            IF left_node->kind = filter_node_kind-function.
+
+              function ?= left_node.
+              function_name = function->function.
+              IF function_name <> 'substringof'.
+                filter_error = 'Only substringof is supported. '.
+                wrong_filter = abap_true.
+              ENDIF.
+
+              function_parameters = function->parameters.
+
+              IF function_parameters IS NOT INITIAL.
+
+                DATA(param1) = function_parameters[ 1 ].
+                IF param1->kind = filter_node_kind-literal.
+                  literal ?= param1.
+                  r_filter_fieldname = literal->literal_converted.
+                ELSE.
+                  wrong_filter = abap_true.
+                ENDIF.
+                DATA(param2) = function_parameters[ 2 ].
+                IF param2->kind = filter_node_kind-property.
+                  property ?= param2.
+                  property_name = property->property_name.
+                ELSE.
+                  wrong_filter = abap_true.
+                ENDIF.
+
+                IF property_name = 'FIELD_NAME'.
+*
+*                  ls_supplier_name-sign  = 'I'.
+*                  ls_supplier_name-option  ='CP'.
+*                  ls_supplier_name-low  = '*' && r_filter_fieldname && '*'.
+*                  APPEND ls_supplier_name TO lt_supplier_name.
+
+                ELSE.
+                  filter_error = 'Property:' && property_name && ' is not supported. '.
+                  wrong_filter = abap_true.
+                ENDIF.
+              ELSE.
+                wrong_filter = abap_true.
+              ENDIF.
+            ELSEIF left_node->kind = filter_node_kind-member.
+              member ?= left_node.
+              IF member->path->kind = filter_node_kind-property.
+                property ?= member->path.
+                property_name = property->property_name.
+                IF property_name <> 'FIELD_NAME'.
+                  filter_error = ' Only Filter Property FIELD_NAME is supported'.
+                  wrong_filter = abap_true.
+                ENDIF.
+              ENDIF.
+              IF member->source_object->kind = filter_node_kind-property.
+                property ?= member->source_object.
+                property_name = property->property_name.
+                IF property_name <> 'TOFIELDS'.
+                  filter_error = ' Only Navigation Property TOFIELDS is supported'.
+                  wrong_filter = abap_true.
+                ENDIF.
+              ENDIF.
+
+            ELSE.
+              wrong_filter = abap_true.
+            ENDIF.
+          ENDIF.
+
+          CLEAR function.
+          CLEAR property.
+          CLEAR literal.
+          CLEAR function_parameters.
+          CLEAR operator_name.
+          CLEAR function_name.
+          CLEAR property_name.
+
+          IF right_node IS BOUND.
+            IF right_node->kind = filter_node_kind-function.
+*
+*              function ?= right_node.
+*              lv_function = function->function.
+*              IF lv_function <> 'substringof'.
+*                lv_filter_error = 'Only substringof is supported. '.
+*                wrong_filter = abap_true.
+*              ENDIF.
+*
+*              lt_param_tab = function->parameters.
+*
+*              IF lt_param_tab IS NOT INITIAL.
+*
+*                param1 = lt_param_tab[ 1 ].
+*                IF param1->kind = filter_node_kind-literal.
+*                  literal ?= param1.
+*                  r_filter_fieldname = literal->literal_converted.
+*                ELSE.
+*                  wrong_filter = abap_true.
+*                ENDIF.
+*
+*                param2 = lt_param_tab[ 2 ].
+*                IF param2->kind = filter_node_kind-property.
+*                  property ?= param2.
+*                  lv_property = property->property_name.
+*                ELSE.
+*                  wrong_filter = abap_true.
+*                ENDIF.
+*
+*                IF lv_property = 'SUPPLIER_NAME'.
+*
+*                  ls_supplier_name-sign  = 'I'.
+*                  ls_supplier_name-option  ='CP'.
+*                  ls_supplier_name-low  = '*' && r_filter_fieldname && '*'.
+*                  APPEND ls_supplier_name TO lt_supplier_name.
+*
+*                ELSEIF lv_property = 'PRODUCT_ID'.
+*
+*                  ls_product_id-sign  = 'I'.
+*                  ls_product_id-option  ='CP'.
+*                  ls_product_id-low  = '*' && r_filter_fieldname && '*'.
+*                  APPEND ls_product_id TO lt_product_id.
+*
+*                ELSE.
+*                  " raise error message that filter string does not match the expected format
+*                  " an additional property was found in the filter string
+*                  lv_filter_error = 'Property:' && lv_property && ' is not supported. '.
+*                  wrong_filter = abap_true.
+*                ENDIF.
+*              ELSE.
+*                wrong_filter = abap_true.
+*              ENDIF.
+            ELSEIF right_node->kind = filter_node_kind-literal.
+              literal ?= right_node.
+              r_filter_fieldname = literal->literal_converted.
+            ELSE.
+              wrong_filter = abap_true.
+            ENDIF.
+          ENDIF.
+
+        ELSE.
+          filter_error = ' Filter is not binary. '.
+          wrong_filter = abap_true.
+        ENDIF.
+
+
+
+      ENDIF.
+
+      IF wrong_filter = abap_true.
+
+        RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+          EXPORTING
+            textid            = /iwbep/cx_mgw_busi_exception=>business_error_unlimited
+            message_unlimited = filter_error && supported_filter_string.
+
+      ENDIF.
+    ENDIF.
+
   ENDMETHOD.
 
 
