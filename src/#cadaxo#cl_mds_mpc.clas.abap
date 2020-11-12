@@ -45,12 +45,17 @@ TT_PARAMETER type standard table of TS_PARAMETER. .
      TS_PROPERTY type /CADAXO/MDS_OD_PROPERTY. .
   types:
 TT_PROPERTY type standard table of TS_PROPERTY. .
+  types:
+     TS_LEGENDCUST type /CADAXO/MDS_OD_LEGEND. .
+  types:
+TT_LEGENDCUST type standard table of TS_LEGENDCUST. .
 
   constants GC_ACTIONLINK type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'ActionLink' ##NO_TEXT.
   constants GC_ANNOTATION type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Annotation' ##NO_TEXT.
   constants GC_DATASOURCE type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Datasource' ##NO_TEXT.
   constants GC_FIELD type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Field' ##NO_TEXT.
   constants GC_FIELDSEARCH type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'FieldSearch' ##NO_TEXT.
+  constants GC_LEGENDCUST type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'LegendCust' ##NO_TEXT.
   constants GC_LINK type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Link' ##NO_TEXT.
   constants GC_MANAGED type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Managed' ##NO_TEXT.
   constants GC_PARAMETER type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Parameter' ##NO_TEXT.
@@ -93,6 +98,9 @@ private section.
   methods DEFINE_PROPERTY
     raising
       /IWBEP/CX_MGW_MED_EXCEPTION .
+  methods DEFINE_LEGENDCUST
+    raising
+      /IWBEP/CX_MGW_MED_EXCEPTION .
   methods DEFINE_ASSOCIATIONS
     raising
       /IWBEP/CX_MGW_MED_EXCEPTION .
@@ -121,6 +129,7 @@ define_field( ).
 define_annotation( ).
 define_parameter( ).
 define_property( ).
+define_legendcust( ).
 define_associations( ).
   endmethod.
 
@@ -358,24 +367,24 @@ lo_assoc_set = model->create_association_set( iv_association_set_name  = 'toData
 
 * Navigation Properties for entity - Datasource
 lo_entity_type = model->get_entity_type( iv_entity_name = 'Datasource' ). "#EC NOTEXT
-lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toFields' "#EC NOTEXT
-                                                              iv_abap_fieldname = 'TOFIELDS' "#EC NOTEXT
-                                                              iv_association_name = 'toFields' ). "#EC NOTEXT
-lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toAnnotations' "#EC NOTEXT
-                                                              iv_abap_fieldname = 'TOANNOTATIONS' "#EC NOTEXT
-                                                              iv_association_name = 'toDatasourceAnnotations' ). "#EC NOTEXT
-lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toParameters' "#EC NOTEXT
-                                                              iv_abap_fieldname = 'TOPARAMETERS' "#EC NOTEXT
-                                                              iv_association_name = 'toDatasourceParameters' ). "#EC NOTEXT
-lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toLinks' "#EC NOTEXT
-                                                              iv_abap_fieldname = 'TOLINKS' "#EC NOTEXT
-                                                              iv_association_name = 'toLinks' ). "#EC NOTEXT
-lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toAllLinks' "#EC NOTEXT
-                                                              iv_abap_fieldname = 'TOALLLINKS' "#EC NOTEXT
-                                                              iv_association_name = 'toLinks' ). "#EC NOTEXT
 lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toProperties' "#EC NOTEXT
                                                               iv_abap_fieldname = 'TOPROPERTIES' "#EC NOTEXT
                                                               iv_association_name = 'toDatasourceProperties' ). "#EC NOTEXT
+lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toAllLinks' "#EC NOTEXT
+                                                              iv_abap_fieldname = 'TOALLLINKS' "#EC NOTEXT
+                                                              iv_association_name = 'toLinks' ). "#EC NOTEXT
+lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toLinks' "#EC NOTEXT
+                                                              iv_abap_fieldname = 'TOLINKS' "#EC NOTEXT
+                                                              iv_association_name = 'toLinks' ). "#EC NOTEXT
+lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toParameters' "#EC NOTEXT
+                                                              iv_abap_fieldname = 'TOPARAMETERS' "#EC NOTEXT
+                                                              iv_association_name = 'toDatasourceParameters' ). "#EC NOTEXT
+lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toAnnotations' "#EC NOTEXT
+                                                              iv_abap_fieldname = 'TOANNOTATIONS' "#EC NOTEXT
+                                                              iv_association_name = 'toDatasourceAnnotations' ). "#EC NOTEXT
+lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toFields' "#EC NOTEXT
+                                                              iv_abap_fieldname = 'TOFIELDS' "#EC NOTEXT
+                                                              iv_association_name = 'toFields' ). "#EC NOTEXT
 * Navigation Properties for entity - Link
 lo_entity_type = model->get_entity_type( iv_entity_name = 'Link' ). "#EC NOTEXT
 lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toDatasource2' "#EC NOTEXT
@@ -386,15 +395,15 @@ lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  
                                                               iv_association_name = 'toLinks' ). "#EC NOTEXT
 * Navigation Properties for entity - Field
 lo_entity_type = model->get_entity_type( iv_entity_name = 'Field' ). "#EC NOTEXT
-lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toAnnotations' "#EC NOTEXT
-                                                              iv_abap_fieldname = 'TOANNOTATIONS' "#EC NOTEXT
-                                                              iv_association_name = 'toFieldAnnotations' ). "#EC NOTEXT
-lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toProperties' "#EC NOTEXT
-                                                              iv_abap_fieldname = 'TOPROPERTIES' "#EC NOTEXT
-                                                              iv_association_name = 'toFieldProperties' ). "#EC NOTEXT
 lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toDatasource' "#EC NOTEXT
                                                               iv_abap_fieldname = 'TODATASOURCE' "#EC NOTEXT
                                                               iv_association_name = 'toFields' ). "#EC NOTEXT
+lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toProperties' "#EC NOTEXT
+                                                              iv_abap_fieldname = 'TOPROPERTIES' "#EC NOTEXT
+                                                              iv_association_name = 'toFieldProperties' ). "#EC NOTEXT
+lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toAnnotations' "#EC NOTEXT
+                                                              iv_abap_fieldname = 'TOANNOTATIONS' "#EC NOTEXT
+                                                              iv_association_name = 'toFieldAnnotations' ). "#EC NOTEXT
 * Navigation Properties for entity - Annotation
 lo_entity_type = model->get_entity_type( iv_entity_name = 'Annotation' ). "#EC NOTEXT
 lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toDatasource' "#EC NOTEXT
@@ -726,6 +735,99 @@ lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_FIELD'
 *   ENTITY SETS
 ***********************************************************************************************************************************
 lo_entity_set = lo_entity_type->create_entity_set( 'Fields' ). "#EC NOTEXT
+
+lo_entity_set->set_creatable( abap_false ).
+lo_entity_set->set_updatable( abap_false ).
+lo_entity_set->set_deletable( abap_false ).
+
+lo_entity_set->set_pageable( abap_false ).
+lo_entity_set->set_addressable( abap_false ).
+lo_entity_set->set_has_ftxt_search( abap_false ).
+lo_entity_set->set_subscribable( abap_false ).
+lo_entity_set->set_filter_required( abap_false ).
+  endmethod.
+
+
+  method DEFINE_LEGENDCUST.
+*&---------------------------------------------------------------------*
+*&           Generated code for the MODEL PROVIDER BASE CLASS         &*
+*&                                                                     &*
+*&  !!!NEVER MODIFY THIS CLASS. IN CASE YOU WANT TO CHANGE THE MODEL  &*
+*&        DO THIS IN THE MODEL PROVIDER SUBCLASS!!!                   &*
+*&                                                                     &*
+*&---------------------------------------------------------------------*
+
+
+  data:
+        lo_annotation     type ref to /iwbep/if_mgw_odata_annotation,                "#EC NEEDED
+        lo_entity_type    type ref to /iwbep/if_mgw_odata_entity_typ,                "#EC NEEDED
+        lo_complex_type   type ref to /iwbep/if_mgw_odata_cmplx_type,                "#EC NEEDED
+        lo_property       type ref to /iwbep/if_mgw_odata_property,                  "#EC NEEDED
+        lo_entity_set     type ref to /iwbep/if_mgw_odata_entity_set.                "#EC NEEDED
+
+***********************************************************************************************************************************
+*   ENTITY - LegendCust
+***********************************************************************************************************************************
+
+lo_entity_type = model->create_entity_type( iv_entity_type_name = 'LegendCust' iv_def_entity_set = abap_false ). "#EC NOTEXT
+
+***********************************************************************************************************************************
+*Properties
+***********************************************************************************************************************************
+
+lo_property = lo_entity_type->create_property( iv_property_name = 'LegendId' iv_abap_fieldname = 'LEGEND_ID' ). "#EC NOTEXT
+lo_property->set_is_key( ).
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'StatusKey' iv_abap_fieldname = 'STATUS_KEY' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '027' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 60 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Color1' iv_abap_fieldname = 'COLOR_1' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '028' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 60 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Color2' iv_abap_fieldname = 'COLOR_2' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '029' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 60 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Description' iv_abap_fieldname = 'DESCRIPTION' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '030' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+
+lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_LEGEND'
+                                iv_bind_conversions = 'X' ). "#EC NOTEXT
+
+
+***********************************************************************************************************************************
+*   ENTITY SETS
+***********************************************************************************************************************************
+lo_entity_set = lo_entity_type->create_entity_set( 'LegendCusts' ). "#EC NOTEXT
 
 lo_entity_set->set_creatable( abap_false ).
 lo_entity_set->set_updatable( abap_false ).
@@ -1073,7 +1175,7 @@ lo_entity_set->set_filter_required( abap_false ).
 *&---------------------------------------------------------------------*
 
 
-  CONSTANTS: lc_gen_date_time TYPE timestamp VALUE '20201107174429'.                  "#EC NOTEXT
+  CONSTANTS: lc_gen_date_time TYPE timestamp VALUE '20201110091341'.                  "#EC NOTEXT
   rv_last_modified = super->get_last_modified( ).
   IF rv_last_modified LT lc_gen_date_time.
     rv_last_modified = lc_gen_date_time.
@@ -1226,6 +1328,36 @@ ls_text_element-artifact_type          = 'PROP'.                                
 ls_text_element-parent_artifact_name   = 'Annotation'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
 ls_text_element-text_symbol            = '018'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
+
+
+clear ls_text_element.
+ls_text_element-artifact_name          = 'StatusKey'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'LegendCust'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '027'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'Color1'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'LegendCust'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '028'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'Color2'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'LegendCust'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '029'.              "#EC NOTEXT
+APPEND ls_text_element TO rt_text_elements.
+clear ls_text_element.
+ls_text_element-artifact_name          = 'Description'.                 "#EC NOTEXT
+ls_text_element-artifact_type          = 'PROP'.                                       "#EC NOTEXT
+ls_text_element-parent_artifact_name   = 'LegendCust'.                            "#EC NOTEXT
+ls_text_element-parent_artifact_type   = 'ETYP'.                                       "#EC NOTEXT
+ls_text_element-text_symbol            = '030'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 

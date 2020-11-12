@@ -137,6 +137,30 @@
      <ENTRY>DS ID</ENTRY>
      <LENGTH>132</LENGTH>
     </item>
+    <item>
+     <ID>I</ID>
+     <KEY>027</KEY>
+     <ENTRY>STATUS_KEY</ENTRY>
+     <LENGTH>132</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>028</KEY>
+     <ENTRY>COLOR_1</ENTRY>
+     <LENGTH>132</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>029</KEY>
+     <ENTRY>COLOR_2</ENTRY>
+     <LENGTH>132</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>030</KEY>
+     <ENTRY>DESCRIPTION</ENTRY>
+     <LENGTH>132</LENGTH>
+    </item>
    </TPOOL>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
@@ -168,6 +192,12 @@
      <CMPNAME>DEFINE_FIELD</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>DEFINE_FIELD</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/CADAXO/CL_MDS_MPC</CLSNAME>
+     <CMPNAME>DEFINE_LEGENDCUST</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>DEFINE_LEGENDCUST</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
      <CLSNAME>/CADAXO/CL_MDS_MPC</CLSNAME>
