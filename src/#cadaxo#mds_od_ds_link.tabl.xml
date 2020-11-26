@@ -20,6 +20,7 @@
      <INTLEN>000008</INTLEN>
      <DATATYPE>STRG</DATATYPE>
      <MASK>  STRG</MASK>
+     <DDTEXT>Display Link</DDTEXT>
     </DD03P>
     <DD03P>
      <TABNAME>/CADAXO/MDS_OD_DS_LINK</TABNAME>
@@ -31,6 +32,7 @@
      <INTLEN>000008</INTLEN>
      <DATATYPE>STRG</DATATYPE>
      <MASK>  STRG</MASK>
+     <DDTEXT>Edit Link</DDTEXT>
     </DD03P>
    </DD03P_TABLE>
   </asx:values>

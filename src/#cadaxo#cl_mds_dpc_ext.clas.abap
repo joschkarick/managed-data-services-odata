@@ -75,6 +75,8 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
 
     ENDCASE.
 
+    DELETE annotations WHERE value IS INITIAL.
+
     et_entityset = CORRESPONDING #( annotations MAPPING annotation_name = annotation ).
 
   ENDMETHOD.
@@ -186,7 +188,7 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
 
     DATA(field) = api->get_field_by_id( converted_keys-field_id ).
 
-    er_entity = CORRESPONDING #( field-api->get_as_structure( ) ).
+    er_entity = CORRESPONDING #( field-api->get_as_structure( ) MAPPING length = length_string ).
 
   ENDMETHOD.
 
@@ -197,36 +199,39 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
 
     DATA(filter) = io_tech_request_context->get_filter( ).
     DATA(filter_so) = filter->get_filter_select_options( ).
-*filter->
 
     io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = converted_keys ).
 
     DATA(fields) = api->get_fields_by_dsid( i_ds_id = converted_keys-ds_id ).
 
     LOOP AT fields ASSIGNING FIELD-SYMBOL(<field>).
-      APPEND CORRESPONDING #( <field>-api->get_as_structure( ) )  TO et_entityset.
+      APPEND CORRESPONDING #( <field>-api->get_as_structure( ) MAPPING length = length_string )  TO et_entityset.
     ENDLOOP.
 
   ENDMETHOD.
 
 
   METHOD legendcusts_get_entityset.
-
-    "et_entityset = VALUE #( ( legend_id = '1'  status_key = 'TABL'                 color_1 = 'darkblue'    color_2 = 'blue'  description = 'Table' icon = 'sap-icon://database')
-    "                        ( legend_id = '2'  status_key = 'DDLS'                 color_1 = 'darkgreen'   color_2 = 'green' description = 'CDS View' icon = 'sap-icon://table-view' )
     et_entityset = VALUE #( ( legend_id = '1'  status_key = 'TABL'                 color_1 = 'darkblue'    color_2 = 'blue'  description = 'Table')
                             ( legend_id = '2'  status_key = 'DDLS'                 color_1 = 'darkgreen'   color_2 = 'green' description = 'CDS View')
                             ( legend_id = '3'  status_key = 'DDLX'                 color_1 = 'lime'        color_2 = 'green' description = 'CDS Extension' )
-                            ( legend_id = '4'  status_key = 'BASE'                 color_1 = 'blue'        color_2 = 'silver'      description = 'As select from' )
-                            ( legend_id = '5'  status_key = 'ASSOCIATION'          color_1 = 'green'       color_2 = 'fuchsia'      description = 'Association' )
-                            ( legend_id = '6'  status_key = 'EXTERNAL_ASSOCIATION' color_1 = 'darkgreen'   color_2 = 'yellow'      description = 'Ext. Association' )
+                            ( legend_id = '12' status_key = 'YDLS'                 color_1 = 'teal'        color_2 = 'teal'  description = 'CDS View Extension' )
+                            ( legend_id = '13' status_key = 'YABL'                 color_1 = 'navy'        color_2 = 'navy'  description = 'SQL View' )
+
+                            ( legend_id = '101' status_key = 'XXFILTERED_TABL'     color_1 = 'grey'        color_2 = 'grey'  description = 'Table - filtered')
+                            ( legend_id = '102' status_key = 'XXFILTERED_DDLS'     color_1 = 'grey'        color_2 = 'grey'  description = 'CDS View - filtered')
+                            ( legend_id = '103' status_key = 'XXFILTERED_DDLX'     color_1 = 'grey'        color_2 = 'grey'  description = 'CDS Extension - filtered' )
+                            ( legend_id = '112' status_key = 'XXFILTERED_YDLS'     color_1 = 'grey'        color_2 = 'grey'  description = 'CDS View Extension - filtered' )
+                            ( legend_id = '113' status_key = 'XXFILTERED_YABL'     color_1 = 'grey'        color_2 = 'grey'  description = 'SQL View - filtered' )
+
+                            ( legend_id = '4'  status_key = 'BASE'                 color_1 = 'blue'        color_2 = 'silver'    description = 'As select from' )
+                            ( legend_id = '5'  status_key = 'ASSOCIATION'          color_1 = 'green'       color_2 = 'fuchsia'   description = 'Association' )
+                            ( legend_id = '6'  status_key = 'EXTERNAL_ASSOCIATION' color_1 = 'darkgreen'   color_2 = 'yellow'    description = 'Ext. Association' )
                             ( legend_id = '7'  status_key = 'ISUSED'               color_1 = 'orange'      color_2 = 'aqua'      description = 'Is used in' )
                             ( legend_id = '8'  status_key = 'SQLVIEW'              color_1 = 'darkblue'    color_2 = 'lime'      description = 'Has SQL View' )
                             ( legend_id = '9'  status_key = 'METADATAEXTENSION'    color_1 = 'lime'        color_2 = 'teal'      description = 'Has Metadata Extension' )
-                            ( legend_id = '10' status_key = 'ENHANCEMENT'          color_1 = 'darkmagenta' color_2 = 'olive'      description = 'Enhances' )
-                            ( legend_id = '11' status_key = 'DISABLED'             color_1 = 'grey'        color_2 = 'grey'  description = 'Disabled' )
-                            ( legend_id = '12'  status_key = 'YDLS'                color_1 = 'teal'        color_2 = 'teal' description = 'CDS View Extension' )
-                            ( legend_id = '13'  status_key = 'YABL'                color_1 = 'navy'        color_2 = 'navy'  description = 'SQL View' ) ).
+                            ( legend_id = '10' status_key = 'ENHANCEMENT'          color_1 = 'darkmagenta' color_2 = 'olive'     description = 'Enhances' )
+                            ( legend_id = '11' status_key = 'DISABLED'             color_1 = 'grey'        color_2 = 'grey'      description = 'Disabled' ) ).
   ENDMETHOD.
 
 
