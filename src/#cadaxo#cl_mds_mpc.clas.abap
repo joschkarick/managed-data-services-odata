@@ -367,12 +367,6 @@ lo_assoc_set = model->create_association_set( iv_association_set_name  = 'toData
 
 * Navigation Properties for entity - Datasource
 lo_entity_type = model->get_entity_type( iv_entity_name = 'Datasource' ). "#EC NOTEXT
-lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toProperties' "#EC NOTEXT
-                                                              iv_abap_fieldname = 'TOPROPERTIES' "#EC NOTEXT
-                                                              iv_association_name = 'toDatasourceProperties' ). "#EC NOTEXT
-lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toAllLinks' "#EC NOTEXT
-                                                              iv_abap_fieldname = 'TOALLLINKS' "#EC NOTEXT
-                                                              iv_association_name = 'toLinks' ). "#EC NOTEXT
 lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toLinks' "#EC NOTEXT
                                                               iv_abap_fieldname = 'TOLINKS' "#EC NOTEXT
                                                               iv_association_name = 'toLinks' ). "#EC NOTEXT
@@ -385,13 +379,19 @@ lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  
 lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toFields' "#EC NOTEXT
                                                               iv_abap_fieldname = 'TOFIELDS' "#EC NOTEXT
                                                               iv_association_name = 'toFields' ). "#EC NOTEXT
+lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toAllLinks' "#EC NOTEXT
+                                                              iv_abap_fieldname = 'TOALLLINKS' "#EC NOTEXT
+                                                              iv_association_name = 'toLinks' ). "#EC NOTEXT
+lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toProperties' "#EC NOTEXT
+                                                              iv_abap_fieldname = 'TOPROPERTIES' "#EC NOTEXT
+                                                              iv_association_name = 'toDatasourceProperties' ). "#EC NOTEXT
 * Navigation Properties for entity - Link
 lo_entity_type = model->get_entity_type( iv_entity_name = 'Link' ). "#EC NOTEXT
-lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toDatasource2' "#EC NOTEXT
-                                                              iv_abap_fieldname = 'TODATASOURCE2' "#EC NOTEXT
-                                                              iv_association_name = 'toLinks' ). "#EC NOTEXT
 lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toDatasource1' "#EC NOTEXT
                                                               iv_abap_fieldname = 'TODATASOURCE1' "#EC NOTEXT
+                                                              iv_association_name = 'toLinks' ). "#EC NOTEXT
+lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toDatasource2' "#EC NOTEXT
+                                                              iv_abap_fieldname = 'TODATASOURCE2' "#EC NOTEXT
                                                               iv_association_name = 'toLinks' ). "#EC NOTEXT
 * Navigation Properties for entity - Field
 lo_entity_type = model->get_entity_type( iv_entity_name = 'Field' ). "#EC NOTEXT
@@ -475,7 +475,6 @@ lo_complex_type = model->create_complex_type( 'Managed' ). "#EC NOTEXT
 *Properties
 ***********************************************************************************************************************************
 lo_property = lo_complex_type->create_property( iv_property_name  = 'ChangedBy' iv_abap_fieldname = 'CHANGED_BY' ). "#EC NOTEXT
-lo_property->set_label_from_text_element( iv_text_element_symbol = '023' iv_text_element_container = gc_incl_name ). "#EC NOTEXT
 lo_property->set_type_edm_string( ).
 lo_property->set_maxlength( iv_max_length = 12 ).
 lo_property->set_creatable( abap_false ).
@@ -484,12 +483,20 @@ lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 lo_property = lo_complex_type->create_property( iv_property_name  = 'ChangedAt' iv_abap_fieldname = 'CHANGED_AT' ). "#EC NOTEXT
+lo_property->set_label_from_text_element( iv_text_element_symbol = '031' iv_text_element_container = gc_incl_name ). "#EC NOTEXT
 lo_property->set_type_edm_datetime( ).
 lo_property->set_precison( iv_precision = 7 ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
 lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_true ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_complex_type->create_property( iv_property_name  = 'Version' iv_abap_fieldname = 'VERSION' ). "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 lo_complex_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_MANAGED'
                                  iv_bind_conversions = 'X' ). "#EC NOTEXT
@@ -1207,7 +1214,7 @@ lo_entity_set->set_filter_required( abap_false ).
 *&---------------------------------------------------------------------*
 
 
-  CONSTANTS: lc_gen_date_time TYPE timestamp VALUE '20201126030511'.                  "#EC NOTEXT
+  CONSTANTS: lc_gen_date_time TYPE timestamp VALUE '20201207111541'.                  "#EC NOTEXT
   rv_last_modified = super->get_last_modified( ).
   IF rv_last_modified LT lc_gen_date_time.
     rv_last_modified = lc_gen_date_time.
@@ -1409,11 +1416,11 @@ ls_text_element-text_symbol            = '002'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
 
 clear ls_text_element.
-ls_text_element-artifact_name          = 'ChangedBy'.                 "#EC NOTEXT
+ls_text_element-artifact_name          = 'ChangedAt'.                 "#EC NOTEXT
 ls_text_element-artifact_type          = 'PROP'.                                           "#EC NOTEXT
 ls_text_element-parent_artifact_name   = 'Managed'.                            "#EC NOTEXT
 ls_text_element-parent_artifact_type   = 'CTYP'.                                           "#EC NOTEXT
-ls_text_element-text_symbol            = '023'.              "#EC NOTEXT
+ls_text_element-text_symbol            = '031'.              "#EC NOTEXT
 APPEND ls_text_element TO rt_text_elements.
   endmethod.
 ENDCLASS.

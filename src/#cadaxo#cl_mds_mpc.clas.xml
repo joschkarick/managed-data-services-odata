@@ -115,12 +115,6 @@
     </item>
     <item>
      <ID>I</ID>
-     <KEY>023</KEY>
-     <ENTRY>CHANGED_BY</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
      <KEY>024</KEY>
      <ENTRY>DDFIELDNAME_L</ENTRY>
      <LENGTH>132</LENGTH>
@@ -159,6 +153,12 @@
      <ID>I</ID>
      <KEY>030</KEY>
      <ENTRY>DESCRIPTION</ENTRY>
+     <LENGTH>132</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>031</KEY>
+     <ENTRY>Changed at</ENTRY>
      <LENGTH>132</LENGTH>
     </item>
    </TPOOL>
