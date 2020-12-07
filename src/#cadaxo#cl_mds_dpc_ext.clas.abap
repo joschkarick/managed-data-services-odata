@@ -139,6 +139,8 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
 
     er_entity = CORRESPONDING #( nodes[ 1 ] MAPPING object_name = name object_type = type ).
     er_entity-link = nodeapi->get_action_links(  ).
+
+    er_entity-managed-version = 'Backend: Odata 0.9-7b2c6eb API 0.9-b75b892'.
   ENDMETHOD.
 
 
@@ -172,6 +174,8 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
         IF search_4_field IS NOT INITIAL AND <ds>-field_search IS INITIAL.
           <entity>-object_state = <entity>-object_state + 100.
         ENDIF.
+
+        <entity>-managed-version = 'Backend: Odata 0.9-7b2c6eb API 0.9-b75b892'.
       ENDLOOP.
 
     ELSE.
