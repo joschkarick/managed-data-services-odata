@@ -158,9 +158,14 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
 
 
     IF object_semantic_key IS NOT INITIAL.
-      DATA(dss) = api->get_datasources_by_semkey( i_ds_semkey        = object_semantic_key
-                                                  i_fieldname_filter = CONV #( search_4_field ) ).
 
+      TRY.
+          DATA(dss) = api->get_datasources_by_semkey( i_ds_semkey        = object_semantic_key
+                                                      i_fieldname_filter = CONV #( search_4_field ) ).
+
+      CATCH /cadaxo/cx_mds_id INTO DATA(exception).
+        RAISE EXCEPTION TYPE  /iwbep/cx_mgw_busi_exception EXPORTING textid = exception->if_t100_message~t100key.
+      ENDTRY.
       LOOP AT dss ASSIGNING FIELD-SYMBOL(<ds>).
 
         APPEND CORRESPONDING #( <ds>-api->get_datasource( ) MAPPING object_name = name object_type = type ) TO et_entityset ASSIGNING FIELD-SYMBOL(<entity>).
