@@ -35,9 +35,10 @@ CLASS /cadaxo/cl_mds_dpc_ext DEFINITION
     METHODS legendcusts_get_entityset
          REDEFINITION .
   PRIVATE SECTION.
+    CONSTANTS version_string TYPE string VALUE 'Backend: Odata 0.9-9aa0b3c API 0.9-47e95db' ##NO_TEXT.
     CLASS-DATA: api TYPE REF TO /cadaxo/if_mds_api.
-    METHODS parse_fieldname_filter IMPORTING io_tech_request_context   TYPE REF TO /iwbep/if_mgw_req_entityset
-                                   RETURNING VALUE(r_filter_fieldname) TYPE string
+    METHODS parse_fieldname_filter IMPORTING io_tech_request_context TYPE REF TO /iwbep/if_mgw_req_entityset
+                                   RETURNING VALUE(r_filter)         TYPE /cadaxo/mds_field_search
                                    RAISING   /iwbep/cx_mgw_busi_exception
                                              /iwbep/cx_mgw_tech_exception.
 ENDCLASS.
@@ -140,7 +141,7 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
     er_entity = CORRESPONDING #( nodes[ 1 ] MAPPING object_name = name object_type = type ).
     er_entity-link = nodeapi->get_action_links(  ).
 
-    er_entity-managed-version = 'Backend: Odata 0.9-9aa0b3c API 0.9-47e95db'.
+    er_entity-managed-version = version_string.
   ENDMETHOD.
 
 
@@ -160,8 +161,9 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
     IF object_semantic_key IS NOT INITIAL.
 
       TRY.
-          DATA(dss) = api->get_datasources_by_semkey( i_ds_semkey        = object_semantic_key
-                                                      i_filter_fieldname = CONV #( search_4_field ) ).
+          DATA(dss) = api->get_datasources_by_semkey( i_ds_semkey         = object_semantic_key
+                                                      i_filter_datasource = search_4_field-search_object_name
+                                                      i_filter_fieldname  = search_4_field-search_field_name ).
 
       CATCH /cadaxo/cx_mds_id INTO DATA(exception).
         RAISE EXCEPTION TYPE  /iwbep/cx_mgw_busi_exception EXPORTING textid = exception->if_t100_message~t100key.
@@ -180,7 +182,7 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
           <entity>-object_state = <entity>-object_state + 100.
         ENDIF.
 
-        <entity>-managed-version = 'Backend: Odata 0.9-9aa0b3c API 0.9-47e95db'.
+        <entity>-managed-version = version_string.
       ENDLOOP.
 
     ELSE.
@@ -380,7 +382,11 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
     IF filter_select_options IS NOT INITIAL.
 
       TRY.
-          r_filter_fieldname = filter_select_options[ property = 'FIELD_SEARCH-SEARCH_FIELD_NAME' ]-select_options[ sign = 'I' option = 'EQ'  ]-low.
+          r_filter-search_object_name = filter_select_options[ property = 'FIELD_SEARCH-SEARCH_OBJECT_NAME' ]-select_options[ sign = 'I' option = 'EQ'  ]-low.
+        CATCH cx_sy_itab_line_not_found.
+      ENDTRY.
+      TRY.
+          r_filter-search_field_name = filter_select_options[ property = 'FIELD_SEARCH-SEARCH_FIELD_NAME' ]-select_options[ sign = 'I' option = 'EQ'  ]-low.
         CATCH cx_sy_itab_line_not_found.
           wrong_filter = abap_true.
       ENDTRY.
@@ -420,7 +426,7 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
                 DATA(param1) = function_parameters[ 1 ].
                 IF param1->kind = filter_node_kind-literal.
                   literal ?= param1.
-                  r_filter_fieldname = literal->literal_converted.
+                  r_filter-search_field_name = literal->literal_converted.
                 ELSE.
                   wrong_filter = abap_true.
                 ENDIF.
@@ -533,7 +539,7 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
 *              ENDIF.
             ELSEIF right_node->kind = filter_node_kind-literal.
               literal ?= right_node.
-              r_filter_fieldname = literal->literal_converted.
+              r_filter-search_field_name = literal->literal_converted.
             ELSE.
               wrong_filter = abap_true.
             ENDIF.
