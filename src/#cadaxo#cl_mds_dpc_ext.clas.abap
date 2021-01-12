@@ -35,7 +35,7 @@ CLASS /cadaxo/cl_mds_dpc_ext DEFINITION
     METHODS legendcusts_get_entityset
          REDEFINITION .
   PRIVATE SECTION.
-    CONSTANTS version_string TYPE string VALUE 'Backend: Odata 0.9-9aa0b3c API 0.9-47e95db' ##NO_TEXT.
+    CONSTANTS version_string TYPE string VALUE 'Backend: Odata 0.9-14af9d5 API 0.9-f9c93fe' ##NO_TEXT.
     CLASS-DATA: api TYPE REF TO /cadaxo/if_mds_api.
     METHODS parse_fieldname_filter IMPORTING io_tech_request_context TYPE REF TO /iwbep/if_mgw_req_entityset
                                    RETURNING VALUE(r_filter)         TYPE /cadaxo/mds_field_search
