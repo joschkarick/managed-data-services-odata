@@ -153,9 +153,9 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
     SPLIT searchstring AT '|' INTO object_semantic_key-name object_semantic_key-type rest.
 
     DATA(search_4_field) = parse_fieldname_filter( io_tech_request_context ).
-
-    DATA(filter) = io_tech_request_context->get_filter( ).
-    DATA(filter_so) = filter->get_filter_select_options( ).
+*
+*    DATA(filter) = io_tech_request_context->get_filter( ).
+*    DATA(filter_so) = filter->get_filter_select_options( ).
 
 
     IF object_semantic_key IS NOT INITIAL.
