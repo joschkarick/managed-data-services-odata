@@ -1,39 +1,43 @@
-CLASS /cadaxo/cl_mds_dpc_ext DEFINITION
-  PUBLIC
-  INHERITING FROM /cadaxo/cl_mds_dpc
-  CREATE PUBLIC .
+class /CADAXO/CL_MDS_DPC_EXT definition
+  public
+  inheriting from /CADAXO/CL_MDS_DPC
+  create public .
 
-  PUBLIC SECTION.
+public section.
 
-    CLASS-METHODS class_constructor .
-  PROTECTED SECTION.
+  class-methods CLASS_CONSTRUCTOR .
+protected section.
 
-    METHODS annotations_get_entity
-         REDEFINITION .
-    METHODS annotations_get_entityset
-         REDEFINITION .
-    METHODS datasources_get_entity
-         REDEFINITION .
-    METHODS datasources_get_entityset
-         REDEFINITION .
-    METHODS fields_get_entity
-         REDEFINITION .
-    METHODS fields_get_entityset
-         REDEFINITION .
-    METHODS links_get_entity
-         REDEFINITION .
-    METHODS links_get_entityset
-         REDEFINITION .
-    METHODS parameters_get_entity
-         REDEFINITION .
-    METHODS parameters_get_entityset
-         REDEFINITION .
-    METHODS properties_get_entity
-         REDEFINITION .
-    METHODS properties_get_entityset
-         REDEFINITION .
-    METHODS legendcusts_get_entityset
-         REDEFINITION .
+  methods ANNOTATIONS_GET_ENTITY
+    redefinition .
+  methods ANNOTATIONS_GET_ENTITYSET
+    redefinition .
+  methods DATASOURCES_GET_ENTITY
+    redefinition .
+  methods DATASOURCES_GET_ENTITYSET
+    redefinition .
+  methods FIELDS_GET_ENTITY
+    redefinition .
+  methods FIELDS_GET_ENTITYSET
+    redefinition .
+  methods LEGENDCUSTS_GET_ENTITYSET
+    redefinition .
+  methods LINKS_GET_ENTITY
+    redefinition .
+  methods LINKS_GET_ENTITYSET
+    redefinition .
+  methods PARAMETERS_GET_ENTITY
+    redefinition .
+  methods PARAMETERS_GET_ENTITYSET
+    redefinition .
+  methods PROPERTIES_GET_ENTITY
+    redefinition .
+  methods PROPERTIES_GET_ENTITYSET
+    redefinition .
+  methods ROOTDATASOURCES_GET_ENTITYSET
+    redefinition .
+  methods ROOTDATASOURCES_GET_ENTITY
+    redefinition .
   PRIVATE SECTION.
     CONSTANTS version_string TYPE string VALUE 'Backend: Odata 0.9-14af9d5 API 0.9-f9c93fe' ##NO_TEXT.
     CLASS-DATA: api TYPE REF TO /cadaxo/if_mds_api.
@@ -157,6 +161,17 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
 *    DATA(filter) = io_tech_request_context->get_filter( ).
 *    DATA(filter_so) = filter->get_filter_select_options( ).
 
+    DATA converted_keys TYPE /cadaxo/cl_mds_mpc_ext=>ts_datasource.
+
+    "If coming from /toChildDatasources
+    IF it_navigation_path IS NOT INITIAL.
+      io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = converted_keys ).
+      IF it_navigation_path[ 1 ]-nav_prop = 'toChildDatasources'.
+        DATA(getChildDatasources) = abap_true.
+      ENDIF.
+    ENDIF.
+
+
 
     IF object_semantic_key IS NOT INITIAL.
 
@@ -168,26 +183,55 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
       CATCH /cadaxo/cx_mds_id INTO DATA(exception).
         RAISE EXCEPTION TYPE  /iwbep/cx_mgw_busi_exception EXPORTING textid = exception->if_t100_message~t100key.
       ENDTRY.
-      LOOP AT dss ASSIGNING FIELD-SYMBOL(<ds>).
 
-        APPEND CORRESPONDING #( <ds>-api->get_datasource( ) MAPPING object_name = name object_type = type ) TO et_entityset ASSIGNING FIELD-SYMBOL(<entity>).
-
-        <entity>-link = CORRESPONDING #( <ds>-api->get_action_links( ) ).
-        <entity>-field_search = <ds>-field_search.
-
-        <entity>-object_state = SWITCH #( <ds>-role WHEN /cadaxo/if_mds_api=>ds_role-main THEN 100
-                                                    WHEN /cadaxo/if_mds_api=>ds_role-parent THEN 110
-                                                    WHEN /cadaxo/if_mds_api=>ds_role-child THEN 120 ).
-        IF search_4_field IS NOT INITIAL AND <ds>-field_search IS INITIAL.
-          <entity>-object_state = <entity>-object_state + 100.
-        ENDIF.
-
-        <entity>-managed-version = version_string.
-      ENDLOOP.
-
+    ELSEIF converted_keys-ds_id IS NOT INITIAL.
+ "  coming from /toChildDatasources
+ "  TODO build filter - in DSS remain all converted_keys-object_type only
+      TRY.
+        dss = api->get_datasources_by_id( i_ds_id             = converted_keys-ds_id ).
+      CATCH /cadaxo/cx_mds_id INTO exception.
+        RAISE EXCEPTION TYPE  /iwbep/cx_mgw_busi_exception EXPORTING textid = exception->if_t100_message~t100key.
+      ENDTRY.
     ELSE.
 
     ENDIF.
+
+    LOOP AT dss ASSIGNING FIELD-SYMBOL(<ds>).
+
+      APPEND CORRESPONDING #( <ds>-api->get_datasource( ) MAPPING object_name = name object_type = type ) TO et_entityset ASSIGNING FIELD-SYMBOL(<entity>).
+
+      <entity>-link = CORRESPONDING #( <ds>-api->get_action_links( ) ).
+      <entity>-field_search = <ds>-field_search.
+
+      <entity>-object_state = SWITCH #( <ds>-role WHEN /cadaxo/if_mds_api=>ds_role-main THEN 100
+                                                WHEN /cadaxo/if_mds_api=>ds_role-parent THEN 110
+                                                WHEN /cadaxo/if_mds_api=>ds_role-child THEN 120 ).
+      IF search_4_field IS NOT INITIAL AND <ds>-field_search IS INITIAL.
+        IF search_4_field-action_name <> 'ExpandObject'.
+          <entity>-object_state = <entity>-object_state + 100.
+        ENDIF.
+      ENDIF.
+
+      <entity>-managed-version = version_string.
+    ENDLOOP.
+
+    IF search_4_field IS NOT INITIAL AND search_4_field-action_name = 'GetFieldSource'.
+        DELETE et_entityset WHERE object_state > 200 OR object_state = 120.
+    ELSEIF search_4_field IS NOT INITIAL AND search_4_field-action_name = 'GetFieldSourceAll'.
+        DELETE et_entityset WHERE object_state = 220 OR object_state = 120.
+    ENDIF.
+
+
+    IF search_4_field IS NOT INITIAL AND search_4_field-action_name = 'GetFieldTarget'.
+      DELETE et_entityset WHERE object_state > 200 OR object_state = 110.
+    ELSEIF search_4_field IS NOT INITIAL AND search_4_field-action_name = 'GetFieldTargetAll'.
+      DELETE et_entityset WHERE object_state = 210 OR object_state = 110.
+    ENDIF.
+
+    IF search_4_field-action_name = 'ExpandObject'.
+    "TODO - apply some filters to et_entityset
+    ENDIF.
+
   ENDMETHOD.
 
 
@@ -387,6 +431,12 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
       ENDTRY.
       TRY.
           r_filter-search_field_name = filter_select_options[ property = 'FIELD_SEARCH-SEARCH_FIELD_NAME' ]-select_options[ sign = 'I' option = 'EQ'  ]-low.
+        CATCH cx_sy_itab_line_not_found.
+          wrong_filter = abap_true.
+      ENDTRY.
+
+      TRY.
+          r_filter-action_name = filter_select_options[ property = 'FIELD_SEARCH-ACTION_NAME' ]-select_options[ sign = 'I' option = 'EQ'  ]-low.
         CATCH cx_sy_itab_line_not_found.
           wrong_filter = abap_true.
       ENDTRY.
@@ -596,4 +646,54 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
     et_entityset = CORRESPONDING #( properties ).
 
   ENDMETHOD.
+
+
+  method ROOTDATASOURCES_GET_ENTITY.
+
+      DATA converted_keys TYPE /cadaxo/cl_mds_mpc_ext=>ts_rootdatasource.
+
+    io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = converted_keys ).
+**TRY.
+*SUPER->ROOTDATASOURCES_GET_ENTITY(
+*  EXPORTING
+*    IV_ENTITY_NAME          = IV_ENTITY_NAME
+*    IV_ENTITY_SET_NAME      = IV_ENTITY_SET_NAME
+*    IV_SOURCE_NAME          = IV_SOURCE_NAME
+*    IT_KEY_TAB              = IT_KEY_TAB
+**    io_request_object       = io_request_object
+**    io_tech_request_context = io_tech_request_context
+*    IT_NAVIGATION_PATH      = IT_NAVIGATION_PATH
+**  IMPORTING
+**    er_entity               = er_entity
+**    es_response_context     = es_response_context
+*       ).
+** CATCH /iwbep/cx_mgw_busi_exception .
+** CATCH /iwbep/cx_mgw_tech_exception .
+**ENDTRY.
+  endmethod.
+
+
+  method ROOTDATASOURCES_GET_ENTITYSET.
+
+    DATA converted_keys TYPE /cadaxo/cl_mds_mpc_ext=>ts_rootdatasource.
+    DATA dss TYPE /cadaxo/if_mds_api=>ty_datasources.
+
+    io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = converted_keys ).
+
+    TRY.
+      dss = api->get_datasources_by_id( i_ds_id  = converted_keys-ds_id ).
+    CATCH /cadaxo/cx_mds_id INTO DATA(exception).
+      RAISE EXCEPTION TYPE  /iwbep/cx_mgw_busi_exception EXPORTING textid = exception->if_t100_message~t100key.
+    ENDTRY.
+
+    LOOP AT dss ASSIGNING FIELD-SYMBOL(<ds>) WHERE ds_id <> converted_keys-ds_id.
+
+        IF line_exists( et_entityset[ object_type = <ds>-type ] ).
+            et_entityset[ object_type = <ds>-type ]-count = et_entityset[ object_type = <ds>-type ]-count + 1.
+        ELSE.
+            APPEND VALUE #( ds_id =  converted_keys-ds_id object_type = <ds>-type count = 1 ) TO et_entityset.
+        ENDIF.
+    ENDLOOP.
+
+  endmethod.
 ENDCLASS.
