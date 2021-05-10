@@ -270,6 +270,8 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
     et_entityset = VALUE #( ( legend_id = '1'  status_key = 'TABL'                 color_1 = 'darkblue'    color_2 = 'blue'  description = 'Table')
                             ( legend_id = '2'  status_key = 'DDLS'                 color_1 = 'darkgreen'   color_2 = 'green' description = 'CDS View')
                             ( legend_id = '3'  status_key = 'DDLX'                 color_1 = 'lime'        color_2 = 'green' description = 'CDS Extension' )
+                            ( legend_id = '4' status_key = 'MAINNODE'              color_1 = 'black'        color_2 = 'gold'  description = 'Main Node' )
+
                             ( legend_id = '12' status_key = 'YDLS'                 color_1 = 'mediumseagreen '       color_2 = 'mediumseagreen'  description = 'CDS View Extension' )
                             ( legend_id = '13' status_key = 'YABL'                 color_1 = 'brown'        color_2 = 'chocolate'  description = 'SQL View' )
 
