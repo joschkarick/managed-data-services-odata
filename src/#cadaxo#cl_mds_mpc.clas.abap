@@ -46,6 +46,14 @@ TT_PARAMETER type standard table of TS_PARAMETER. .
   types:
 TT_ROOTDATASOURCE type standard table of TS_ROOTDATASOURCE. .
   types:
+     TS_DASHBOARDCARDOBJECT type /CADAXO/MDS_OD_DASHBOARD_ACARD. .
+  types:
+TT_DASHBOARDCARDOBJECT type standard table of TS_DASHBOARDCARDOBJECT. .
+  types:
+     TS_DASHBOARDCARDSTANDARDOBJECT type /CADAXO/MDS_OD_DASHBOARD_ACARD. .
+  types:
+TT_DASHBOARDCARDSTANDARDOBJECT type standard table of TS_DASHBOARDCARDSTANDARDOBJECT. .
+  types:
      TS_PROPERTY type /CADAXO/MDS_OD_PROPERTY. .
   types:
 TT_PROPERTY type standard table of TS_PROPERTY. .
@@ -53,9 +61,21 @@ TT_PROPERTY type standard table of TS_PROPERTY. .
      TS_LEGENDCUST type /CADAXO/MDS_OD_LEGEND. .
   types:
 TT_LEGENDCUST type standard table of TS_LEGENDCUST. .
+  types:
+     TS_DASHBOARDCARDOBJECTLASTCHAN type /CADAXO/MDS_OD_DASHBOARD_ACARD. .
+  types:
+TT_DASHBOARDCARDOBJECTLASTCHAN type standard table of TS_DASHBOARDCARDOBJECTLASTCHAN. .
+  types:
+     TS_DASHBOARDCARDSTANDARDOBJEC type /CADAXO/MDS_OD_DASHBOARD_ACARD. .
+  types:
+TT_DASHBOARDCARDSTANDARDOBJEC type standard table of TS_DASHBOARDCARDSTANDARDOBJEC. .
 
   constants GC_ACTIONLINK type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'ActionLink' ##NO_TEXT.
   constants GC_ANNOTATION type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Annotation' ##NO_TEXT.
+  constants GC_DASHBOARDCARDOBJECT type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'DashboardCardObject' ##NO_TEXT.
+  constants GC_DASHBOARDCARDOBJECTLASTCHAN type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'DashboardCardObjectLastChanged' ##NO_TEXT.
+  constants GC_DASHBOARDCARDSTANDARDOBJEC type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'DashboardCardStandardObjectLastChanged' ##NO_TEXT.
+  constants GC_DASHBOARDCARDSTANDARDOBJECT type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'DashboardCardStandardObject' ##NO_TEXT.
   constants GC_DATASOURCE type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Datasource' ##NO_TEXT.
   constants GC_FIELD type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'Field' ##NO_TEXT.
   constants GC_FIELDSEARCH type /IWBEP/IF_MGW_MED_ODATA_TYPES=>TY_E_MED_ENTITY_NAME value 'FieldSearch' ##NO_TEXT.
@@ -103,10 +123,22 @@ private section.
   methods DEFINE_ROOTDATASOURCE
     raising
       /IWBEP/CX_MGW_MED_EXCEPTION .
+  methods DEFINE_DASHBOARDCARDOBJECT
+    raising
+      /IWBEP/CX_MGW_MED_EXCEPTION .
+  methods DEFINE_DASHBOARDCARDSTANDARDOB
+    raising
+      /IWBEP/CX_MGW_MED_EXCEPTION .
   methods DEFINE_PROPERTY
     raising
       /IWBEP/CX_MGW_MED_EXCEPTION .
   methods DEFINE_LEGENDCUST
+    raising
+      /IWBEP/CX_MGW_MED_EXCEPTION .
+  methods DEFINE_DASHBOARDCARDOBJECTLAST
+    raising
+      /IWBEP/CX_MGW_MED_EXCEPTION .
+  methods DEFINE_DASHBOARDCARDSTANDARDO
     raising
       /IWBEP/CX_MGW_MED_EXCEPTION .
   methods DEFINE_ASSOCIATIONS
@@ -128,7 +160,7 @@ CLASS /CADAXO/CL_MDS_MPC IMPLEMENTATION.
 *&                                                                     &*
 *&---------------------------------------------------------------------*
 
-model->set_schema_namespace( '/CADAXO/MDS_SRV' ).
+model->set_schema_namespace( 'CadaxoMdsSrv' ).
 
 define_complextypes( ).
 define_datasource( ).
@@ -137,8 +169,12 @@ define_field( ).
 define_annotation( ).
 define_parameter( ).
 define_rootdatasource( ).
+define_dashboardcardobject( ).
+define_dashboardcardstandardob( ).
 define_property( ).
 define_legendcust( ).
+define_dashboardcardobjectlast( ).
+define_dashboardcardstandardo( ).
 define_associations( ).
   endmethod.
 
@@ -357,8 +393,8 @@ lo_assoc_set = model->create_association_set( iv_association_set_name  = 'toRoot
                             iv_def_assoc_set    = abap_false ). "#EC NOTEXT
 * Referential constraint for association - toChildDatasources
 lo_ref_constraint = lo_association->create_ref_constraint( ).
-lo_ref_constraint->add_property( iv_principal_property = 'ObjectType'   iv_dependent_property = 'ObjectType' ). "#EC NOTEXT
 lo_ref_constraint->add_property( iv_principal_property = 'DsId'   iv_dependent_property = 'DsId' ). "#EC NOTEXT
+lo_ref_constraint->add_property( iv_principal_property = 'ObjectType'   iv_dependent_property = 'ObjectType' ). "#EC NOTEXT
 lo_assoc_set = model->create_association_set( iv_association_set_name  = 'toChildDatasourcesSet'                         "#EC NOTEXT
                                               iv_left_entity_set_name  = 'RootDatasources'              "#EC NOTEXT
                                               iv_right_entity_set_name = 'Datasources'             "#EC NOTEXT
@@ -458,12 +494,12 @@ lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  
                                                               iv_association_name = 'toChildDatasources' ). "#EC NOTEXT
 * Navigation Properties for entity - Property
 lo_entity_type = model->get_entity_type( iv_entity_name = 'Property' ). "#EC NOTEXT
-lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toField' "#EC NOTEXT
-                                                              iv_abap_fieldname = 'TOFIELD' "#EC NOTEXT
-                                                              iv_association_name = 'toFieldProperties' ). "#EC NOTEXT
 lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toDatasource' "#EC NOTEXT
                                                               iv_abap_fieldname = 'TODATASOURCE' "#EC NOTEXT
                                                               iv_association_name = 'toDatasourceProperties' ). "#EC NOTEXT
+lo_nav_property = lo_entity_type->create_navigation_property( iv_property_name  = 'toField' "#EC NOTEXT
+                                                              iv_abap_fieldname = 'TOFIELD' "#EC NOTEXT
+                                                              iv_association_name = 'toFieldProperties' ). "#EC NOTEXT
   endmethod.
 
 
@@ -589,6 +625,326 @@ lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 lo_complex_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_FIELD_SEARCH'
                                  iv_bind_conversions = 'X' ). "#EC NOTEXT
+  endmethod.
+
+
+  method DEFINE_DASHBOARDCARDOBJECT.
+*&---------------------------------------------------------------------*
+*&           Generated code for the MODEL PROVIDER BASE CLASS         &*
+*&                                                                     &*
+*&  !!!NEVER MODIFY THIS CLASS. IN CASE YOU WANT TO CHANGE THE MODEL  &*
+*&        DO THIS IN THE MODEL PROVIDER SUBCLASS!!!                   &*
+*&                                                                     &*
+*&---------------------------------------------------------------------*
+
+
+  data:
+        lo_annotation     type ref to /iwbep/if_mgw_odata_annotation,                "#EC NEEDED
+        lo_entity_type    type ref to /iwbep/if_mgw_odata_entity_typ,                "#EC NEEDED
+        lo_complex_type   type ref to /iwbep/if_mgw_odata_cmplx_type,                "#EC NEEDED
+        lo_property       type ref to /iwbep/if_mgw_odata_property,                  "#EC NEEDED
+        lo_entity_set     type ref to /iwbep/if_mgw_odata_entity_set.                "#EC NEEDED
+
+***********************************************************************************************************************************
+*   ENTITY - DashboardCardObject
+***********************************************************************************************************************************
+
+lo_entity_type = model->create_entity_type( iv_entity_type_name = 'DashboardCardObject' iv_def_entity_set = abap_false ). "#EC NOTEXT
+
+***********************************************************************************************************************************
+*Properties
+***********************************************************************************************************************************
+
+lo_property = lo_entity_type->create_property( iv_property_name = 'ObjectType' iv_abap_fieldname = 'OBJECT_TYPE' ). "#EC NOTEXT
+lo_property->set_is_key( ).
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_true ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'ObjectName' iv_abap_fieldname = 'OBJECT_NAME' ). "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_true ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Count' iv_abap_fieldname = 'COUNT' ). "#EC NOTEXT
+lo_property->set_type_edm_int32( ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'TotalCount' iv_abap_fieldname = 'TOTAL_COUNT' ). "#EC NOTEXT
+lo_property->set_type_edm_int32( ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+
+lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_DASHBOARD_ACARD'
+                                iv_bind_conversions = 'X' ). "#EC NOTEXT
+
+
+***********************************************************************************************************************************
+*   ENTITY SETS
+***********************************************************************************************************************************
+lo_entity_set = lo_entity_type->create_entity_set( 'DashboardCardObjects' ). "#EC NOTEXT
+
+lo_entity_set->set_creatable( abap_false ).
+lo_entity_set->set_updatable( abap_false ).
+lo_entity_set->set_deletable( abap_false ).
+
+lo_entity_set->set_pageable( abap_false ).
+lo_entity_set->set_addressable( abap_true ).
+lo_entity_set->set_has_ftxt_search( abap_false ).
+lo_entity_set->set_subscribable( abap_false ).
+lo_entity_set->set_filter_required( abap_false ).
+  endmethod.
+
+
+  method DEFINE_DASHBOARDCARDOBJECTLAST.
+*&---------------------------------------------------------------------*
+*&           Generated code for the MODEL PROVIDER BASE CLASS         &*
+*&                                                                     &*
+*&  !!!NEVER MODIFY THIS CLASS. IN CASE YOU WANT TO CHANGE THE MODEL  &*
+*&        DO THIS IN THE MODEL PROVIDER SUBCLASS!!!                   &*
+*&                                                                     &*
+*&---------------------------------------------------------------------*
+
+
+  data:
+        lo_annotation     type ref to /iwbep/if_mgw_odata_annotation,                "#EC NEEDED
+        lo_entity_type    type ref to /iwbep/if_mgw_odata_entity_typ,                "#EC NEEDED
+        lo_complex_type   type ref to /iwbep/if_mgw_odata_cmplx_type,                "#EC NEEDED
+        lo_property       type ref to /iwbep/if_mgw_odata_property,                  "#EC NEEDED
+        lo_entity_set     type ref to /iwbep/if_mgw_odata_entity_set.                "#EC NEEDED
+
+***********************************************************************************************************************************
+*   ENTITY - DashboardCardObjectLastChanged
+***********************************************************************************************************************************
+
+lo_entity_type = model->create_entity_type( iv_entity_type_name = 'DashboardCardObjectLastChanged' iv_def_entity_set = abap_false ). "#EC NOTEXT
+
+***********************************************************************************************************************************
+*Properties
+***********************************************************************************************************************************
+
+lo_property = lo_entity_type->create_property( iv_property_name = 'ObjectType' iv_abap_fieldname = 'OBJECT_TYPE' ). "#EC NOTEXT
+lo_property->set_is_key( ).
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'ObjectName' iv_abap_fieldname = 'OBJECT_NAME' ). "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Count' iv_abap_fieldname = 'COUNT' ). "#EC NOTEXT
+lo_property->set_type_edm_int32( ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'TotalCount' iv_abap_fieldname = 'TOTAL_COUNT' ). "#EC NOTEXT
+lo_property->set_type_edm_int32( ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+
+lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_DASHBOARD_ACARD'
+                                iv_bind_conversions = 'X' ). "#EC NOTEXT
+
+
+***********************************************************************************************************************************
+*   ENTITY SETS
+***********************************************************************************************************************************
+lo_entity_set = lo_entity_type->create_entity_set( 'DashboardCardObjectLastChangedSet' ). "#EC NOTEXT
+
+lo_entity_set->set_creatable( abap_false ).
+lo_entity_set->set_updatable( abap_false ).
+lo_entity_set->set_deletable( abap_false ).
+
+lo_entity_set->set_pageable( abap_false ).
+lo_entity_set->set_addressable( abap_true ).
+lo_entity_set->set_has_ftxt_search( abap_false ).
+lo_entity_set->set_subscribable( abap_false ).
+lo_entity_set->set_filter_required( abap_false ).
+  endmethod.
+
+
+  method DEFINE_DASHBOARDCARDSTANDARDO.
+*&---------------------------------------------------------------------*
+*&           Generated code for the MODEL PROVIDER BASE CLASS         &*
+*&                                                                     &*
+*&  !!!NEVER MODIFY THIS CLASS. IN CASE YOU WANT TO CHANGE THE MODEL  &*
+*&        DO THIS IN THE MODEL PROVIDER SUBCLASS!!!                   &*
+*&                                                                     &*
+*&---------------------------------------------------------------------*
+
+
+  data:
+        lo_annotation     type ref to /iwbep/if_mgw_odata_annotation,                "#EC NEEDED
+        lo_entity_type    type ref to /iwbep/if_mgw_odata_entity_typ,                "#EC NEEDED
+        lo_complex_type   type ref to /iwbep/if_mgw_odata_cmplx_type,                "#EC NEEDED
+        lo_property       type ref to /iwbep/if_mgw_odata_property,                  "#EC NEEDED
+        lo_entity_set     type ref to /iwbep/if_mgw_odata_entity_set.                "#EC NEEDED
+
+***********************************************************************************************************************************
+*   ENTITY - DashboardCardStandardObjectLastChanged
+***********************************************************************************************************************************
+
+lo_entity_type = model->create_entity_type( iv_entity_type_name = 'DashboardCardStandardObjectLastChanged' iv_def_entity_set = abap_false ). "#EC NOTEXT
+
+***********************************************************************************************************************************
+*Properties
+***********************************************************************************************************************************
+
+lo_property = lo_entity_type->create_property( iv_property_name = 'ObjectType' iv_abap_fieldname = 'OBJECT_TYPE' ). "#EC NOTEXT
+lo_property->set_is_key( ).
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'ObjectName' iv_abap_fieldname = 'OBJECT_NAME' ). "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Count' iv_abap_fieldname = 'COUNT' ). "#EC NOTEXT
+lo_property->set_type_edm_int32( ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'TotalCount' iv_abap_fieldname = 'TOTAL_COUNT' ). "#EC NOTEXT
+lo_property->set_type_edm_int32( ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+
+lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_DASHBOARD_ACARD'
+                                iv_bind_conversions = 'X' ). "#EC NOTEXT
+
+
+***********************************************************************************************************************************
+*   ENTITY SETS
+***********************************************************************************************************************************
+lo_entity_set = lo_entity_type->create_entity_set( 'DashboardCardStdObjectLastChangeSet' ). "#EC NOTEXT
+
+lo_entity_set->set_creatable( abap_false ).
+lo_entity_set->set_updatable( abap_false ).
+lo_entity_set->set_deletable( abap_false ).
+
+lo_entity_set->set_pageable( abap_false ).
+lo_entity_set->set_addressable( abap_true ).
+lo_entity_set->set_has_ftxt_search( abap_false ).
+lo_entity_set->set_subscribable( abap_false ).
+lo_entity_set->set_filter_required( abap_false ).
+  endmethod.
+
+
+  method DEFINE_DASHBOARDCARDSTANDARDOB.
+*&---------------------------------------------------------------------*
+*&           Generated code for the MODEL PROVIDER BASE CLASS         &*
+*&                                                                     &*
+*&  !!!NEVER MODIFY THIS CLASS. IN CASE YOU WANT TO CHANGE THE MODEL  &*
+*&        DO THIS IN THE MODEL PROVIDER SUBCLASS!!!                   &*
+*&                                                                     &*
+*&---------------------------------------------------------------------*
+
+
+  data:
+        lo_annotation     type ref to /iwbep/if_mgw_odata_annotation,                "#EC NEEDED
+        lo_entity_type    type ref to /iwbep/if_mgw_odata_entity_typ,                "#EC NEEDED
+        lo_complex_type   type ref to /iwbep/if_mgw_odata_cmplx_type,                "#EC NEEDED
+        lo_property       type ref to /iwbep/if_mgw_odata_property,                  "#EC NEEDED
+        lo_entity_set     type ref to /iwbep/if_mgw_odata_entity_set.                "#EC NEEDED
+
+***********************************************************************************************************************************
+*   ENTITY - DashboardCardStandardObject
+***********************************************************************************************************************************
+
+lo_entity_type = model->create_entity_type( iv_entity_type_name = 'DashboardCardStandardObject' iv_def_entity_set = abap_false ). "#EC NOTEXT
+
+***********************************************************************************************************************************
+*Properties
+***********************************************************************************************************************************
+
+lo_property = lo_entity_type->create_property( iv_property_name = 'ObjectType' iv_abap_fieldname = 'OBJECT_TYPE' ). "#EC NOTEXT
+lo_property->set_is_key( ).
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 4 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'ObjectName' iv_abap_fieldname = 'OBJECT_NAME' ). "#EC NOTEXT
+lo_property->set_type_edm_string( ).
+lo_property->set_maxlength( iv_max_length = 40 ). "#EC NOTEXT
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'Count' iv_abap_fieldname = 'COUNT' ). "#EC NOTEXT
+lo_property->set_type_edm_int32( ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+lo_property = lo_entity_type->create_property( iv_property_name = 'TotalCount' iv_abap_fieldname = 'TOTAL_COUNT' ). "#EC NOTEXT
+lo_property->set_type_edm_int32( ).
+lo_property->set_creatable( abap_false ).
+lo_property->set_updatable( abap_false ).
+lo_property->set_sortable( abap_false ).
+lo_property->set_nullable( abap_false ).
+lo_property->set_filterable( abap_false ).
+
+lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_DASHBOARD_ACARD'
+                                iv_bind_conversions = 'X' ). "#EC NOTEXT
+
+
+***********************************************************************************************************************************
+*   ENTITY SETS
+***********************************************************************************************************************************
+lo_entity_set = lo_entity_type->create_entity_set( 'DashboardCardStandardObjects' ). "#EC NOTEXT
+
+lo_entity_set->set_creatable( abap_false ).
+lo_entity_set->set_updatable( abap_false ).
+lo_entity_set->set_deletable( abap_false ).
+
+lo_entity_set->set_pageable( abap_false ).
+lo_entity_set->set_addressable( abap_true ).
+lo_entity_set->set_has_ftxt_search( abap_false ).
+lo_entity_set->set_subscribable( abap_false ).
+lo_entity_set->set_filter_required( abap_false ).
   endmethod.
 
 
@@ -1334,7 +1690,7 @@ lo_entity_set->set_filter_required( abap_false ).
 *&---------------------------------------------------------------------*
 
 
-  CONSTANTS: lc_gen_date_time TYPE timestamp VALUE '20210422083720'.                  "#EC NOTEXT
+  CONSTANTS: lc_gen_date_time TYPE timestamp VALUE '20210627212526'.                  "#EC NOTEXT
   rv_last_modified = super->get_last_modified( ).
   IF rv_last_modified LT lc_gen_date_time.
     rv_last_modified = lc_gen_date_time.

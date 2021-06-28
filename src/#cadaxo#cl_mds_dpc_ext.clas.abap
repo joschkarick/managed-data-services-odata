@@ -12,6 +12,12 @@ protected section.
     redefinition .
   methods ANNOTATIONS_GET_ENTITYSET
     redefinition .
+  methods DASHBOARDCARDO01_GET_ENTITYSET
+    redefinition .
+  methods DASHBOARDCARDOBJ_GET_ENTITYSET
+    redefinition .
+  methods DASHBOARDCARDSTA_GET_ENTITYSET
+    redefinition .
   methods DATASOURCES_GET_ENTITY
     redefinition .
   methods DATASOURCES_GET_ENTITYSET
@@ -34,9 +40,11 @@ protected section.
     redefinition .
   methods PROPERTIES_GET_ENTITYSET
     redefinition .
+  methods ROOTDATASOURCES_GET_ENTITY
+    redefinition .
   methods ROOTDATASOURCES_GET_ENTITYSET
     redefinition .
-  methods ROOTDATASOURCES_GET_ENTITY
+  methods DASHBOARDCARDS01_GET_ENTITYSET
     redefinition .
   PRIVATE SECTION.
     CONSTANTS version_string TYPE string VALUE 'Backend: Odata 0.9-14af9d5 API 0.9-f9c93fe' ##NO_TEXT.
@@ -90,6 +98,39 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
   METHOD class_constructor.
     api = /cadaxo/cl_mds_api=>get_instance( ).
   ENDMETHOD.
+
+
+  method DASHBOARDCARDO01_GET_ENTITYSET.
+  et_entityset = api->get_dashboard_data(
+                   i_custom_objects = abap_true
+                   i_last_week_data = abap_true
+               ).
+  endmethod.
+
+
+  method DASHBOARDCARDOBJ_GET_ENTITYSET.
+  et_entityset = api->get_dashboard_data(
+                   i_custom_objects = abap_true
+                   i_last_week_data = abap_false
+               ).
+
+  endmethod.
+
+
+  method DASHBOARDCARDS01_GET_ENTITYSET.
+  et_entityset = api->get_dashboard_data(
+                   i_custom_objects = abap_false
+                   i_last_week_data = abap_true
+               ).
+  endmethod.
+
+
+  method DASHBOARDCARDSTA_GET_ENTITYSET.
+  et_entityset = api->get_dashboard_data(
+                   i_custom_objects = abap_false
+                   i_last_week_data = abap_false
+               ).
+  endmethod.
 
 
   METHOD datasources_get_entity.
