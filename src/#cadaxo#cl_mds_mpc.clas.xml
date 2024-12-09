@@ -10,158 +10,6 @@
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
    </VSEOCLASS>
-   <TPOOL>
-    <item>
-     <ID>I</ID>
-     <KEY>001</KEY>
-     <ENTRY>DISPLAY</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>002</KEY>
-     <ENTRY>EDIT</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>004</KEY>
-     <ENTRY>DESCRIPTION</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>005</KEY>
-     <ENTRY>OBJECT_STATE</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>006</KEY>
-     <ENTRY>DESCRIPTION</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>007</KEY>
-     <ENTRY>TYPE</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>008</KEY>
-     <ENTRY>DDCARDINALITY</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>009</KEY>
-     <ENTRY>DDCARDINALITY</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>010</KEY>
-     <ENTRY>FIELD_ID</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>011</KEY>
-     <ENTRY>DDFIELDNAME_L</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>012</KEY>
-     <ENTRY>DDFDPOS</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>013</KEY>
-     <ENTRY>DESCRIPTION</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>014</KEY>
-     <ENTRY>OBJECT_STATE</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>015</KEY>
-     <ENTRY>DDANNOTATION_KEY</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>016</KEY>
-     <ENTRY>DDFDPOS</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>017</KEY>
-     <ENTRY>DDANNOTATION_VAL</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>018</KEY>
-     <ENTRY>OBJECT_STATE</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>024</KEY>
-     <ENTRY>DDFIELDNAME_L</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>025</KEY>
-     <ENTRY>DS ID</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>026</KEY>
-     <ENTRY>DS ID</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>027</KEY>
-     <ENTRY>STATUS_KEY</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>028</KEY>
-     <ENTRY>COLOR_1</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>029</KEY>
-     <ENTRY>COLOR_2</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>030</KEY>
-     <ENTRY>DESCRIPTION</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>031</KEY>
-     <ENTRY>Changed at</ENTRY>
-     <LENGTH>132</LENGTH>
-    </item>
-   </TPOOL>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
      <CLSNAME>/CADAXO/CL_MDS_MPC</CLSNAME>
@@ -180,6 +28,30 @@
      <CMPNAME>DEFINE_COMPLEXTYPES</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>DEFINE_COMPLEXTYPES</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/CADAXO/CL_MDS_MPC</CLSNAME>
+     <CMPNAME>DEFINE_DASHBOARDCARDOBJECT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>DEFINE_DASHBOARDCARDOBJECT</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/CADAXO/CL_MDS_MPC</CLSNAME>
+     <CMPNAME>DEFINE_DASHBOARDCARDOBJECTLAST</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>DEFINE_DASHBOARDCARDOBJECTLAST</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/CADAXO/CL_MDS_MPC</CLSNAME>
+     <CMPNAME>DEFINE_DASHBOARDCARDSTANDARDO</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>DEFINE_DASHBOARDCARDSTANDARDO</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/CADAXO/CL_MDS_MPC</CLSNAME>
+     <CMPNAME>DEFINE_DASHBOARDCARDSTANDARDOB</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>DEFINE_DASHBOARDCARDSTANDARDOB</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
      <CLSNAME>/CADAXO/CL_MDS_MPC</CLSNAME>
@@ -216,6 +88,12 @@
      <CMPNAME>DEFINE_PROPERTY</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>DEFINE_PROPERTY</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>/CADAXO/CL_MDS_MPC</CLSNAME>
+     <CMPNAME>DEFINE_ROOTDATASOURCE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>DEFINE_ROOTDATASOURCE</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
      <CLSNAME>/CADAXO/CL_MDS_MPC</CLSNAME>
