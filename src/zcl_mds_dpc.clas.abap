@@ -920,18 +920,18 @@ CLASS /CADAXO/CL_MDS_DPC IMPLEMENTATION.
 *&*   generated methods inside the DPC provider subclass - /CADAXO/CL_MDS_DPC_EXT
 *&-----------------------------------------------------------------------------------------------*
 
- DATA dashboardcards01_create_entity TYPE /cadaxo/cl_mds_mpc=>ts_dashboardcardstandardobjec.
- DATA datasources_create_entity TYPE /cadaxo/cl_mds_mpc=>ts_datasource.
- DATA dashboardcardo01_create_entity TYPE /cadaxo/cl_mds_mpc=>ts_dashboardcardobjectlastchan.
- DATA legendcusts_create_entity TYPE /cadaxo/cl_mds_mpc=>ts_legendcust.
- DATA links_create_entity TYPE /cadaxo/cl_mds_mpc=>ts_link.
- DATA properties_create_entity TYPE /cadaxo/cl_mds_mpc=>ts_property.
- DATA dashboardcardsta_create_entity TYPE /cadaxo/cl_mds_mpc=>ts_dashboardcardstandardobject.
- DATA fields_create_entity TYPE /cadaxo/cl_mds_mpc=>ts_field.
- DATA dashboardcardobj_create_entity TYPE /cadaxo/cl_mds_mpc=>ts_dashboardcardobject.
- DATA rootdatasources_create_entity TYPE /cadaxo/cl_mds_mpc=>ts_rootdatasource.
- DATA annotations_create_entity TYPE /cadaxo/cl_mds_mpc=>ts_annotation.
- DATA parameters_create_entity TYPE /cadaxo/cl_mds_mpc=>ts_parameter.
+ DATA dashboardcards01_create_entity TYPE zcl_mds_mpc=>ts_dashboardcardstandardobjec.
+ DATA datasources_create_entity TYPE zcl_mds_mpc=>ts_datasource.
+ DATA dashboardcardo01_create_entity TYPE zcl_mds_mpc=>ts_dashboardcardobjectlastchan.
+ DATA legendcusts_create_entity TYPE zcl_mds_mpc=>ts_legendcust.
+ DATA links_create_entity TYPE zcl_mds_mpc=>ts_link.
+ DATA properties_create_entity TYPE zcl_mds_mpc=>ts_property.
+ DATA dashboardcardsta_create_entity TYPE zcl_mds_mpc=>ts_dashboardcardstandardobject.
+ DATA fields_create_entity TYPE zcl_mds_mpc=>ts_field.
+ DATA dashboardcardobj_create_entity TYPE zcl_mds_mpc=>ts_dashboardcardobject.
+ DATA rootdatasources_create_entity TYPE zcl_mds_mpc=>ts_rootdatasource.
+ DATA annotations_create_entity TYPE zcl_mds_mpc=>ts_annotation.
+ DATA parameters_create_entity TYPE zcl_mds_mpc=>ts_parameter.
  DATA lv_entityset_name TYPE string.
 
 lv_entityset_name = io_tech_request_context->get_entity_set_name( ).
@@ -1435,18 +1435,18 @@ CASE lv_entityset_name.
 *&*   generated methods inside the DPC provider subclass - /CADAXO/CL_MDS_DPC_EXT
 *&-----------------------------------------------------------------------------------------------*
 
- DATA datasources_get_entity TYPE /cadaxo/cl_mds_mpc=>ts_datasource.
- DATA dashboardcards01_get_entity TYPE /cadaxo/cl_mds_mpc=>ts_dashboardcardstandardobjec.
- DATA parameters_get_entity TYPE /cadaxo/cl_mds_mpc=>ts_parameter.
- DATA dashboardcardo01_get_entity TYPE /cadaxo/cl_mds_mpc=>ts_dashboardcardobjectlastchan.
- DATA links_get_entity TYPE /cadaxo/cl_mds_mpc=>ts_link.
- DATA legendcusts_get_entity TYPE /cadaxo/cl_mds_mpc=>ts_legendcust.
- DATA rootdatasources_get_entity TYPE /cadaxo/cl_mds_mpc=>ts_rootdatasource.
- DATA properties_get_entity TYPE /cadaxo/cl_mds_mpc=>ts_property.
- DATA annotations_get_entity TYPE /cadaxo/cl_mds_mpc=>ts_annotation.
- DATA fields_get_entity TYPE /cadaxo/cl_mds_mpc=>ts_field.
- DATA dashboardcardsta_get_entity TYPE /cadaxo/cl_mds_mpc=>ts_dashboardcardstandardobject.
- DATA dashboardcardobj_get_entity TYPE /cadaxo/cl_mds_mpc=>ts_dashboardcardobject.
+ DATA datasources_get_entity TYPE zcl_mds_mpc=>ts_datasource.
+ DATA dashboardcards01_get_entity TYPE zcl_mds_mpc=>ts_dashboardcardstandardobjec.
+ DATA parameters_get_entity TYPE zcl_mds_mpc=>ts_parameter.
+ DATA dashboardcardo01_get_entity TYPE zcl_mds_mpc=>ts_dashboardcardobjectlastchan.
+ DATA links_get_entity TYPE zcl_mds_mpc=>ts_link.
+ DATA legendcusts_get_entity TYPE zcl_mds_mpc=>ts_legendcust.
+ DATA rootdatasources_get_entity TYPE zcl_mds_mpc=>ts_rootdatasource.
+ DATA properties_get_entity TYPE zcl_mds_mpc=>ts_property.
+ DATA annotations_get_entity TYPE zcl_mds_mpc=>ts_annotation.
+ DATA fields_get_entity TYPE zcl_mds_mpc=>ts_field.
+ DATA dashboardcardsta_get_entity TYPE zcl_mds_mpc=>ts_dashboardcardstandardobject.
+ DATA dashboardcardobj_get_entity TYPE zcl_mds_mpc=>ts_dashboardcardobject.
  DATA lv_entityset_name TYPE string.
  DATA lr_entity TYPE REF TO data.
 
@@ -1814,18 +1814,18 @@ CASE lv_entityset_name.
 *&*   If you want to change the DPC implementation, use the
 *&*   generated methods inside the DPC provider subclass - /CADAXO/CL_MDS_DPC_EXT
 *&-----------------------------------------------------------------------------------------------*
- DATA datasources_get_entityset TYPE /cadaxo/cl_mds_mpc=>tt_datasource.
- DATA dashboardcards01_get_entityset TYPE /cadaxo/cl_mds_mpc=>tt_dashboardcardstandardobjec.
- DATA dashboardcardo01_get_entityset TYPE /cadaxo/cl_mds_mpc=>tt_dashboardcardobjectlastchan.
- DATA links_get_entityset TYPE /cadaxo/cl_mds_mpc=>tt_link.
- DATA legendcusts_get_entityset TYPE /cadaxo/cl_mds_mpc=>tt_legendcust.
- DATA properties_get_entityset TYPE /cadaxo/cl_mds_mpc=>tt_property.
- DATA fields_get_entityset TYPE /cadaxo/cl_mds_mpc=>tt_field.
- DATA dashboardcardsta_get_entityset TYPE /cadaxo/cl_mds_mpc=>tt_dashboardcardstandardobject.
- DATA parameters_get_entityset TYPE /cadaxo/cl_mds_mpc=>tt_parameter.
- DATA dashboardcardobj_get_entityset TYPE /cadaxo/cl_mds_mpc=>tt_dashboardcardobject.
- DATA rootdatasources_get_entityset TYPE /cadaxo/cl_mds_mpc=>tt_rootdatasource.
- DATA annotations_get_entityset TYPE /cadaxo/cl_mds_mpc=>tt_annotation.
+ DATA datasources_get_entityset TYPE zcl_mds_mpc=>tt_datasource.
+ DATA dashboardcards01_get_entityset TYPE zcl_mds_mpc=>tt_dashboardcardstandardobjec.
+ DATA dashboardcardo01_get_entityset TYPE zcl_mds_mpc=>tt_dashboardcardobjectlastchan.
+ DATA links_get_entityset TYPE zcl_mds_mpc=>tt_link.
+ DATA legendcusts_get_entityset TYPE zcl_mds_mpc=>tt_legendcust.
+ DATA properties_get_entityset TYPE zcl_mds_mpc=>tt_property.
+ DATA fields_get_entityset TYPE zcl_mds_mpc=>tt_field.
+ DATA dashboardcardsta_get_entityset TYPE zcl_mds_mpc=>tt_dashboardcardstandardobject.
+ DATA parameters_get_entityset TYPE zcl_mds_mpc=>tt_parameter.
+ DATA dashboardcardobj_get_entityset TYPE zcl_mds_mpc=>tt_dashboardcardobject.
+ DATA rootdatasources_get_entityset TYPE zcl_mds_mpc=>tt_rootdatasource.
+ DATA annotations_get_entityset TYPE zcl_mds_mpc=>tt_annotation.
  DATA lv_entityset_name TYPE string.
 
 lv_entityset_name = io_tech_request_context->get_entity_set_name( ).
@@ -2221,18 +2221,18 @@ CASE lv_entityset_name.
 *&*   generated methods inside the DPC provider subclass - /CADAXO/CL_MDS_DPC_EXT
 *&-----------------------------------------------------------------------------------------------*
 
- DATA rootdatasources_update_entity TYPE /cadaxo/cl_mds_mpc=>ts_rootdatasource.
- DATA links_update_entity TYPE /cadaxo/cl_mds_mpc=>ts_link.
- DATA properties_update_entity TYPE /cadaxo/cl_mds_mpc=>ts_property.
- DATA legendcusts_update_entity TYPE /cadaxo/cl_mds_mpc=>ts_legendcust.
- DATA annotations_update_entity TYPE /cadaxo/cl_mds_mpc=>ts_annotation.
- DATA dashboardcardsta_update_entity TYPE /cadaxo/cl_mds_mpc=>ts_dashboardcardstandardobject.
- DATA dashboardcardo01_update_entity TYPE /cadaxo/cl_mds_mpc=>ts_dashboardcardobjectlastchan.
- DATA parameters_update_entity TYPE /cadaxo/cl_mds_mpc=>ts_parameter.
- DATA datasources_update_entity TYPE /cadaxo/cl_mds_mpc=>ts_datasource.
- DATA fields_update_entity TYPE /cadaxo/cl_mds_mpc=>ts_field.
- DATA dashboardcards01_update_entity TYPE /cadaxo/cl_mds_mpc=>ts_dashboardcardstandardobjec.
- DATA dashboardcardobj_update_entity TYPE /cadaxo/cl_mds_mpc=>ts_dashboardcardobject.
+ DATA rootdatasources_update_entity TYPE zcl_mds_mpc=>ts_rootdatasource.
+ DATA links_update_entity TYPE zcl_mds_mpc=>ts_link.
+ DATA properties_update_entity TYPE zcl_mds_mpc=>ts_property.
+ DATA legendcusts_update_entity TYPE zcl_mds_mpc=>ts_legendcust.
+ DATA annotations_update_entity TYPE zcl_mds_mpc=>ts_annotation.
+ DATA dashboardcardsta_update_entity TYPE zcl_mds_mpc=>ts_dashboardcardstandardobject.
+ DATA dashboardcardo01_update_entity TYPE zcl_mds_mpc=>ts_dashboardcardobjectlastchan.
+ DATA parameters_update_entity TYPE zcl_mds_mpc=>ts_parameter.
+ DATA datasources_update_entity TYPE zcl_mds_mpc=>ts_datasource.
+ DATA fields_update_entity TYPE zcl_mds_mpc=>ts_field.
+ DATA dashboardcards01_update_entity TYPE zcl_mds_mpc=>ts_dashboardcardstandardobjec.
+ DATA dashboardcardobj_update_entity TYPE zcl_mds_mpc=>ts_dashboardcardobject.
  DATA lv_entityset_name TYPE string.
  DATA lr_entity TYPE REF TO data.
 

@@ -48,9 +48,9 @@ protected section.
     redefinition .
   PRIVATE SECTION.
     CONSTANTS version_string TYPE string VALUE 'Backend: Odata 0.9-14af9d5 API 0.9-f9c93fe' ##NO_TEXT.
-    CLASS-DATA: api TYPE REF TO /cadaxo/if_mds_api.
+    CLASS-DATA: api TYPE REF TO zif_mds_api.
     METHODS parse_fieldname_filter IMPORTING io_tech_request_context TYPE REF TO /iwbep/if_mgw_req_entityset
-                                   RETURNING VALUE(r_filter)         TYPE /cadaxo/mds_field_search
+                                   RETURNING VALUE(r_filter)         TYPE zmds_field_search
                                    RAISING   /iwbep/cx_mgw_busi_exception
                                              /iwbep/cx_mgw_tech_exception.
 ENDCLASS.
@@ -77,12 +77,12 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
 
     CASE iv_source_name.
       WHEN 'Datasource'.
-        DATA ds_keys TYPE /cadaxo/cl_mds_mpc_ext=>ts_datasource.
+        DATA ds_keys TYPE zcl_mds_mpc_ext=>ts_datasource.
         io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = ds_keys ).
         DATA(annotations) = api->get_annotations_by_dsid( ds_keys-ds_id ).
 
       WHEN 'Field'.
-        DATA field_keys TYPE /cadaxo/cl_mds_mpc_ext=>ts_field.
+        DATA field_keys TYPE zcl_mds_mpc_ext=>ts_field.
         io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = field_keys ).
         annotations = api->get_annotations_by_fieldid( field_keys-field_id ).
 
@@ -96,7 +96,7 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
 
 
   METHOD class_constructor.
-    api = /cadaxo/cl_mds_api=>get_instance( ).
+    api = zcl_mds_api=>get_instance( ).
   ENDMETHOD.
 
 
@@ -144,10 +144,10 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
     IF navigation IS INITIAL.
       io_tech_request_context->get_converted_keys( IMPORTING es_key_values = converted_keys ).
     ELSE.
-      DATA: field_sm TYPE /cadaxo/cl_mds_mpc=>ts_field.
-      DATA: link_sm  TYPE /cadaxo/cl_mds_mpc=>ts_link.
-      DATA: parameter_sm  TYPE /cadaxo/cl_mds_mpc=>ts_parameter.
-      DATA: property_sm  TYPE /cadaxo/cl_mds_mpc=>ts_property.
+      DATA: field_sm TYPE zcl_mds_mpc=>ts_field.
+      DATA: link_sm  TYPE zcl_mds_mpc=>ts_link.
+      DATA: parameter_sm  TYPE zcl_mds_mpc=>ts_parameter.
+      DATA: property_sm  TYPE zcl_mds_mpc=>ts_property.
       CASE navigation[ 1 ]-source_entity_type.
         WHEN 'Field'.
           io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = field_sm ).
@@ -191,7 +191,7 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
 
 
   METHOD datasources_get_entityset.
-    DATA: object_semantic_key TYPE /cadaxo/mds_ds_semkey.
+    DATA: object_semantic_key TYPE zmds_ds_semkey.
     DATA: rest TYPE c.
 
     DATA(searchstring) = cl_http_utility=>unescape_url( iv_search_string ).
@@ -202,7 +202,7 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
 *    DATA(filter) = io_tech_request_context->get_filter( ).
 *    DATA(filter_so) = filter->get_filter_select_options( ).
 
-    DATA converted_keys TYPE /cadaxo/cl_mds_mpc_ext=>ts_datasource.
+    DATA converted_keys TYPE zcl_mds_mpc_ext=>ts_datasource.
 
     "If coming from /toChildDatasources
     IF it_navigation_path IS NOT INITIAL.
@@ -221,7 +221,7 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
                                                       i_filter_datasource = search_4_field-search_object_name
                                                       i_filter_fieldname  = search_4_field-search_field_name ).
 
-      CATCH /cadaxo/cx_mds_id INTO DATA(exception).
+      CATCH zcx_mds_id INTO DATA(exception).
         RAISE EXCEPTION TYPE  /iwbep/cx_mgw_busi_exception EXPORTING textid = exception->if_t100_message~t100key.
       ENDTRY.
 
@@ -230,7 +230,7 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
  "  TODO build filter - in DSS remain all converted_keys-object_type only
       TRY.
         dss = api->get_datasources_by_id( i_ds_id             = converted_keys-ds_id ).
-      CATCH /cadaxo/cx_mds_id INTO exception.
+      CATCH zcx_mds_id INTO exception.
         RAISE EXCEPTION TYPE  /iwbep/cx_mgw_busi_exception EXPORTING textid = exception->if_t100_message~t100key.
       ENDTRY.
     ELSE.
@@ -244,9 +244,9 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
       <entity>-link = CORRESPONDING #( <ds>-api->get_action_links( ) ).
       <entity>-field_search = <ds>-field_search.
 
-      <entity>-object_state = SWITCH #( <ds>-role WHEN /cadaxo/if_mds_api=>ds_role-main THEN 100
-                                                WHEN /cadaxo/if_mds_api=>ds_role-parent THEN 110
-                                                WHEN /cadaxo/if_mds_api=>ds_role-child THEN 120 ).
+      <entity>-object_state = SWITCH #( <ds>-role WHEN zif_mds_api=>ds_role-main THEN 100
+                                                WHEN zif_mds_api=>ds_role-parent THEN 110
+                                                WHEN zif_mds_api=>ds_role-child THEN 120 ).
       IF search_4_field IS NOT INITIAL AND <ds>-field_search IS INITIAL.
         IF search_4_field-action_name <> 'ExpandObject'.
           <entity>-object_state = <entity>-object_state + 100.
@@ -291,7 +291,7 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
 
   METHOD fields_get_entityset.
 
-    DATA converted_keys TYPE /cadaxo/cl_mds_mpc_ext=>ts_datasource.
+    DATA converted_keys TYPE zcl_mds_mpc_ext=>ts_datasource.
 
     DATA(filter) = io_tech_request_context->get_filter( ).
     DATA(filter_so) = filter->get_filter_select_options( ).
@@ -357,7 +357,7 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
 
   METHOD links_get_entityset.
 
-    DATA converted_keys TYPE /cadaxo/cl_mds_mpc_ext=>ts_datasource.
+    DATA converted_keys TYPE zcl_mds_mpc_ext=>ts_datasource.
 
     IF  it_navigation_path   IS INITIAL.
 *      io_tech_request_context->get_converted_keys( IMPORTING es_key_values = converted_keys ).
@@ -375,7 +375,7 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
       DATA(datasources) = api->get_datasources_by_id( i_ds_id      = links[ 1 ]-object_id1 ).
 
       DATA: alllinks LIKE links.
-      DATA: rg_used_ds TYPE RANGE OF /cadaxo/mds_ds_id.
+      DATA: rg_used_ds TYPE RANGE OF zmds_ds_id.
       LOOP AT datasources ASSIGNING FIELD-SYMBOL(<datasource>).
         APPEND VALUE #( sign = 'I' option = 'EQ' low = <datasource>-ds_id ) TO rg_used_ds.
         APPEND LINES OF api->get_links_by_dsid( <datasource>-ds_id ) TO alllinks.
@@ -417,7 +417,7 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
 
   METHOD parameters_get_entityset.
 
-    DATA converted_keys TYPE /cadaxo/cl_mds_mpc_ext=>ts_datasource.
+    DATA converted_keys TYPE zcl_mds_mpc_ext=>ts_datasource.
 
     io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = converted_keys ).
 
@@ -675,12 +675,12 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
 
     CASE iv_source_name.
       WHEN 'Datasource'.
-        DATA ds_keys TYPE /cadaxo/cl_mds_mpc_ext=>ts_datasource.
+        DATA ds_keys TYPE zcl_mds_mpc_ext=>ts_datasource.
         io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = ds_keys ).
         DATA(properties) = api->get_properties_by_dsid( ds_keys-ds_id ).
 
       WHEN 'Field'.
-        DATA field_keys TYPE /cadaxo/cl_mds_mpc_ext=>ts_field.
+        DATA field_keys TYPE zcl_mds_mpc_ext=>ts_field.
         io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = field_keys ).
         properties = api->get_properties_by_fieldid( field_keys-field_id ).
 
@@ -693,7 +693,7 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
 
   method ROOTDATASOURCES_GET_ENTITY.
 
-      DATA converted_keys TYPE /cadaxo/cl_mds_mpc_ext=>ts_rootdatasource.
+      DATA converted_keys TYPE zcl_mds_mpc_ext=>ts_rootdatasource.
 
     io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = converted_keys ).
 **TRY.
@@ -718,14 +718,14 @@ CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
 
   method ROOTDATASOURCES_GET_ENTITYSET.
 
-    DATA converted_keys TYPE /cadaxo/cl_mds_mpc_ext=>ts_rootdatasource.
-    DATA dss TYPE /cadaxo/if_mds_api=>ty_datasources.
+    DATA converted_keys TYPE zcl_mds_mpc_ext=>ts_rootdatasource.
+    DATA dss TYPE zif_mds_api=>ty_datasources.
 
     io_tech_request_context->get_converted_source_keys( IMPORTING es_key_values = converted_keys ).
 
     TRY.
       dss = api->get_datasources_by_id( i_ds_id  = converted_keys-ds_id ).
-    CATCH /cadaxo/cx_mds_id INTO DATA(exception).
+    CATCH zcx_mds_id INTO DATA(exception).
       RAISE EXCEPTION TYPE  /iwbep/cx_mgw_busi_exception EXPORTING textid = exception->if_t100_message~t100key.
     ENDTRY.
 
