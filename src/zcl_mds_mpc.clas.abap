@@ -1,4 +1,4 @@
-class /CADAXO/CL_MDS_MPC definition
+class ZCL_MDS_MPC definition
   public
   inheriting from /IWBEP/CL_MGW_PUSH_ABS_MODEL
   create public .
@@ -6,7 +6,7 @@ class /CADAXO/CL_MDS_MPC definition
 public section.
 
   types:
-      ACTIONLINK type /CADAXO/MDS_OD_DS_LINK. .
+      ACTIONLINK type ZMDS_OD_DS_LINK. .
   types:
    begin of ts_text_element,
       artifact_name  type c length 40,       " technical name
@@ -18,55 +18,55 @@ public section.
   types:
          tt_text_elements type standard table of ts_text_element with key text_symbol. .
   types:
-      MANAGED type /CADAXO/MDS_OD_MANAGED. .
+      MANAGED type ZMDS_OD_MANAGED. .
   types:
-      FIELDSEARCH type /CADAXO/MDS_FIELD_SEARCH. .
+      FIELDSEARCH type ZMDS_FIELD_SEARCH. .
   types:
-     TS_DATASOURCE type /CADAXO/MDS_OD_DATASOURCE. .
+     TS_DATASOURCE type ZMDS_OD_DATASOURCE. .
   types:
 TT_DATASOURCE type standard table of TS_DATASOURCE. .
   types:
-     TS_LINK type /CADAXO/MDS_OD_LINK. .
+     TS_LINK type ZMDS_OD_LINK. .
   types:
 TT_LINK type standard table of TS_LINK. .
   types:
-     TS_FIELD type /CADAXO/MDS_OD_FIELD. .
+     TS_FIELD type ZMDS_OD_FIELD. .
   types:
 TT_FIELD type standard table of TS_FIELD. .
   types:
-     TS_ANNOTATION type /CADAXO/MDS_OD_ANNOTATION. .
+     TS_ANNOTATION type ZMDS_OD_ANNOTATION. .
   types:
 TT_ANNOTATION type standard table of TS_ANNOTATION. .
   types:
-     TS_PARAMETER type /CADAXO/MDS_OD_PARAMETER. .
+     TS_PARAMETER type ZMDS_OD_PARAMETER. .
   types:
 TT_PARAMETER type standard table of TS_PARAMETER. .
   types:
-     TS_ROOTDATASOURCE type /CADAXO/MDS_OD_ROOTDATASOURCE. .
+     TS_ROOTDATASOURCE type ZMDS_OD_ROOTDATASOURCE. .
   types:
 TT_ROOTDATASOURCE type standard table of TS_ROOTDATASOURCE. .
   types:
-     TS_DASHBOARDCARDOBJECT type /CADAXO/MDS_OD_DASHBOARD_ACARD. .
+     TS_DASHBOARDCARDOBJECT type ZMDS_OD_DASHBOARD_ACARD. .
   types:
 TT_DASHBOARDCARDOBJECT type standard table of TS_DASHBOARDCARDOBJECT. .
   types:
-     TS_DASHBOARDCARDSTANDARDOBJECT type /CADAXO/MDS_OD_DASHBOARD_ACARD. .
+     TS_DASHBOARDCARDSTANDARDOBJECT type ZMDS_OD_DASHBOARD_ACARD. .
   types:
 TT_DASHBOARDCARDSTANDARDOBJECT type standard table of TS_DASHBOARDCARDSTANDARDOBJECT. .
   types:
-     TS_PROPERTY type /CADAXO/MDS_OD_PROPERTY. .
+     TS_PROPERTY type ZMDS_OD_PROPERTY. .
   types:
 TT_PROPERTY type standard table of TS_PROPERTY. .
   types:
-     TS_LEGENDCUST type /CADAXO/MDS_OD_LEGEND. .
+     TS_LEGENDCUST type ZMDS_OD_LEGEND. .
   types:
 TT_LEGENDCUST type standard table of TS_LEGENDCUST. .
   types:
-     TS_DASHBOARDCARDOBJECTLASTCHAN type /CADAXO/MDS_OD_DASHBOARD_ACARD. .
+     TS_DASHBOARDCARDOBJECTLASTCHAN type ZMDS_OD_DASHBOARD_ACARD. .
   types:
 TT_DASHBOARDCARDOBJECTLASTCHAN type standard table of TS_DASHBOARDCARDOBJECTLASTCHAN. .
   types:
-     TS_DASHBOARDCARDSTANDARDOBJEC type /CADAXO/MDS_OD_DASHBOARD_ACARD. .
+     TS_DASHBOARDCARDSTANDARDOBJEC type ZMDS_OD_DASHBOARD_ACARD. .
   types:
 TT_DASHBOARDCARDSTANDARDOBJEC type standard table of TS_DASHBOARDCARDSTANDARDOBJEC. .
 
@@ -100,7 +100,7 @@ TT_DASHBOARDCARDSTANDARDOBJEC type standard table of TS_DASHBOARDCARDSTANDARDOBJ
 protected section.
 private section.
 
-  constants GC_INCL_NAME type STRING value '/CADAXO/CL_MDS_MPC============CP' ##NO_TEXT.
+  constants GC_INCL_NAME type STRING value 'ZCL_MDS_MPC============CP' ##NO_TEXT.
 
   methods DEFINE_COMPLEXTYPES
     raising
@@ -148,7 +148,7 @@ ENDCLASS.
 
 
 
-CLASS /CADAXO/CL_MDS_MPC IMPLEMENTATION.
+CLASS ZCL_MDS_MPC IMPLEMENTATION.
 
 
   method DEFINE.
@@ -254,7 +254,7 @@ lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 
-lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_ANNOTATION'
+lo_entity_type->bind_structure( iv_structure_name   = 'ZMDS_OD_ANNOTATION'
                                 iv_bind_conversions = 'X' ). "#EC NOTEXT
 
 
@@ -540,7 +540,7 @@ lo_property->set_updatable( abap_false ).
 lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
-lo_complex_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_DS_LINK'
+lo_complex_type->bind_structure( iv_structure_name   = 'ZMDS_OD_DS_LINK'
                                  iv_bind_conversions = 'X' ). "#EC NOTEXT
 ***********************************************************************************************************************************
 *   COMPLEX TYPE - Managed
@@ -573,7 +573,7 @@ lo_property->set_updatable( abap_false ).
 lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
-lo_complex_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_MANAGED'
+lo_complex_type->bind_structure( iv_structure_name   = 'ZMDS_OD_MANAGED'
                                  iv_bind_conversions = 'X' ). "#EC NOTEXT
 ***********************************************************************************************************************************
 *   COMPLEX TYPE - FieldSearch
@@ -623,7 +623,7 @@ lo_property->set_updatable( abap_false ).
 lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
-lo_complex_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_FIELD_SEARCH'
+lo_complex_type->bind_structure( iv_structure_name   = 'ZMDS_FIELD_SEARCH'
                                  iv_bind_conversions = 'X' ). "#EC NOTEXT
   endmethod.
 
@@ -687,7 +687,7 @@ lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 
-lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_DASHBOARD_ACARD'
+lo_entity_type->bind_structure( iv_structure_name   = 'ZMDS_OD_DASHBOARD_ACARD'
                                 iv_bind_conversions = 'X' ). "#EC NOTEXT
 
 
@@ -767,7 +767,7 @@ lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 
-lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_DASHBOARD_ACARD'
+lo_entity_type->bind_structure( iv_structure_name   = 'ZMDS_OD_DASHBOARD_ACARD'
                                 iv_bind_conversions = 'X' ). "#EC NOTEXT
 
 
@@ -847,7 +847,7 @@ lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 
-lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_DASHBOARD_ACARD'
+lo_entity_type->bind_structure( iv_structure_name   = 'ZMDS_OD_DASHBOARD_ACARD'
                                 iv_bind_conversions = 'X' ). "#EC NOTEXT
 
 
@@ -927,7 +927,7 @@ lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 
-lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_DASHBOARD_ACARD'
+lo_entity_type->bind_structure( iv_structure_name   = 'ZMDS_OD_DASHBOARD_ACARD'
                                 iv_bind_conversions = 'X' ). "#EC NOTEXT
 
 
@@ -1025,7 +1025,7 @@ lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 
-lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_DATASOURCE'
+lo_entity_type->bind_structure( iv_structure_name   = 'ZMDS_OD_DATASOURCE'
                                 iv_bind_conversions = 'X' ). "#EC NOTEXT
 
 
@@ -1168,7 +1168,7 @@ lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 
-lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_FIELD'
+lo_entity_type->bind_structure( iv_structure_name   = 'ZMDS_OD_FIELD'
                                 iv_bind_conversions = 'X' ). "#EC NOTEXT
 
 
@@ -1257,7 +1257,7 @@ lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 
-lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_LEGEND'
+lo_entity_type->bind_structure( iv_structure_name   = 'ZMDS_OD_LEGEND'
                                 iv_bind_conversions = 'X' ). "#EC NOTEXT
 
 
@@ -1360,7 +1360,7 @@ lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 
-lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_LINK'
+lo_entity_type->bind_structure( iv_structure_name   = 'ZMDS_OD_LINK'
                                 iv_bind_conversions = 'X' ). "#EC NOTEXT
 
 
@@ -1481,7 +1481,7 @@ lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 
-lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_PARAMETER'
+lo_entity_type->bind_structure( iv_structure_name   = 'ZMDS_OD_PARAMETER'
                                 iv_bind_conversions = 'X' ). "#EC NOTEXT
 
 
@@ -1577,7 +1577,7 @@ lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 
-lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_PROPERTY'
+lo_entity_type->bind_structure( iv_structure_name   = 'ZMDS_OD_PROPERTY'
                                 iv_bind_conversions = 'X' ). "#EC NOTEXT
 
 
@@ -1659,7 +1659,7 @@ lo_property->set_sortable( abap_false ).
 lo_property->set_nullable( abap_false ).
 lo_property->set_filterable( abap_false ).
 
-lo_entity_type->bind_structure( iv_structure_name   = '/CADAXO/MDS_OD_ROOTDATASOURCE'
+lo_entity_type->bind_structure( iv_structure_name   = 'ZMDS_OD_ROOTDATASOURCE'
                                 iv_bind_conversions = 'X' ). "#EC NOTEXT
 
 

@@ -1,6 +1,6 @@
-class /CADAXO/CL_MDS_DPC_EXT definition
+class ZCL_MDS_DPC_EXT definition
   public
-  inheriting from /CADAXO/CL_MDS_DPC
+  inheriting from ZCL_MDS_DPC
   create public .
 
 public section.
@@ -57,7 +57,7 @@ ENDCLASS.
 
 
 
-CLASS /CADAXO/CL_MDS_DPC_EXT IMPLEMENTATION.
+CLASS ZCL_MDS_DPC_EXT IMPLEMENTATION.
 
 
   METHOD annotations_get_entity.

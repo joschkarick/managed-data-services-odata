@@ -1,6 +1,6 @@
-class /CADAXO/CL_MDS_MPC_EXT definition
+class ZCL_MDS_MPC_EXT definition
   public
-  inheriting from /CADAXO/CL_MDS_MPC
+  inheriting from ZCL_MDS_MPC
   create public .
 
 public section.
@@ -10,5 +10,5 @@ ENDCLASS.
 
 
 
-CLASS /CADAXO/CL_MDS_MPC_EXT IMPLEMENTATION.
+CLASS ZCL_MDS_MPC_EXT IMPLEMENTATION.
 ENDCLASS.

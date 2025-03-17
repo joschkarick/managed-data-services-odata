@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <DD02V>
-    <TABNAME>/CADAXO/MDS_OD_LEGEND</TABNAME>
+    <TABNAME>ZMDS_OD_LEGEND</TABNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <TABCLASS>INTTAB</TABCLASS>
     <DDTEXT>Cadaxo Managed Data Services: OData Legend</DDTEXT>
@@ -12,7 +12,7 @@
    <DD03P_TABLE>
     <DD03P>
      <FIELDNAME>LEGEND_ID</FIELDNAME>
-     <ROLLNAME>/CADAXO/MDS_OBJECT_ID</ROLLNAME>
+     <ROLLNAME>ZMDS_OBJECT_ID</ROLLNAME>
      <ADMINFIELD>0</ADMINFIELD>
      <COMPTYPE>E</COMPTYPE>
     </DD03P>

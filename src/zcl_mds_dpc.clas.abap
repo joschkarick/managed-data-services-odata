@@ -1,4 +1,4 @@
-class /CADAXO/CL_MDS_DPC definition
+class ZCL_MDS_DPC definition
   public
   inheriting from /IWBEP/CL_MGW_PUSH_ABS_DATA
   abstract
@@ -33,7 +33,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_FIELD
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_FIELD
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -58,7 +58,7 @@ protected section.
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITY optional
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_FIELD
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_FIELD
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_ENTITY_CNTXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -77,7 +77,7 @@ protected section.
       !IV_SEARCH_STRING type STRING
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITYSET optional
     exporting
-      !ET_ENTITYSET type /CADAXO/CL_MDS_MPC=>TT_FIELD
+      !ET_ENTITYSET type ZCL_MDS_MPC=>TT_FIELD
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_CONTEXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -92,7 +92,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_FIELD
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_FIELD
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -106,7 +106,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_LEGENDCUST
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_LEGENDCUST
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -131,7 +131,7 @@ protected section.
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITY optional
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_LEGENDCUST
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_LEGENDCUST
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_ENTITY_CNTXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -150,7 +150,7 @@ protected section.
       !IV_SEARCH_STRING type STRING
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITYSET optional
     exporting
-      !ET_ENTITYSET type /CADAXO/CL_MDS_MPC=>TT_LEGENDCUST
+      !ET_ENTITYSET type ZCL_MDS_MPC=>TT_LEGENDCUST
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_CONTEXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -165,7 +165,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_LEGENDCUST
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_LEGENDCUST
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -179,7 +179,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_LINK
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_LINK
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -204,7 +204,7 @@ protected section.
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITY optional
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_LINK
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_LINK
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_ENTITY_CNTXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -223,7 +223,7 @@ protected section.
       !IV_SEARCH_STRING type STRING
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITYSET optional
     exporting
-      !ET_ENTITYSET type /CADAXO/CL_MDS_MPC=>TT_LINK
+      !ET_ENTITYSET type ZCL_MDS_MPC=>TT_LINK
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_CONTEXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -238,7 +238,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_LINK
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_LINK
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -252,7 +252,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_PARAMETER
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_PARAMETER
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -277,7 +277,7 @@ protected section.
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITY optional
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_PARAMETER
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_PARAMETER
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_ENTITY_CNTXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -296,7 +296,7 @@ protected section.
       !IV_SEARCH_STRING type STRING
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITYSET optional
     exporting
-      !ET_ENTITYSET type /CADAXO/CL_MDS_MPC=>TT_PARAMETER
+      !ET_ENTITYSET type ZCL_MDS_MPC=>TT_PARAMETER
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_CONTEXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -311,7 +311,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_PARAMETER
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_PARAMETER
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -325,7 +325,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_PROPERTY
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_PROPERTY
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -350,7 +350,7 @@ protected section.
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITY optional
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_PROPERTY
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_PROPERTY
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_ENTITY_CNTXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -369,7 +369,7 @@ protected section.
       !IV_SEARCH_STRING type STRING
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITYSET optional
     exporting
-      !ET_ENTITYSET type /CADAXO/CL_MDS_MPC=>TT_PROPERTY
+      !ET_ENTITYSET type ZCL_MDS_MPC=>TT_PROPERTY
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_CONTEXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -384,7 +384,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_PROPERTY
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_PROPERTY
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -398,7 +398,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_ROOTDATASOURCE
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_ROOTDATASOURCE
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -423,7 +423,7 @@ protected section.
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITY optional
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_ROOTDATASOURCE
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_ROOTDATASOURCE
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_ENTITY_CNTXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -442,7 +442,7 @@ protected section.
       !IV_SEARCH_STRING type STRING
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITYSET optional
     exporting
-      !ET_ENTITYSET type /CADAXO/CL_MDS_MPC=>TT_ROOTDATASOURCE
+      !ET_ENTITYSET type ZCL_MDS_MPC=>TT_ROOTDATASOURCE
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_CONTEXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -457,7 +457,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_ROOTDATASOURCE
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_ROOTDATASOURCE
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -471,7 +471,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_ANNOTATION
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_ANNOTATION
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -496,7 +496,7 @@ protected section.
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITY optional
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_ANNOTATION
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_ANNOTATION
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_ENTITY_CNTXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -515,7 +515,7 @@ protected section.
       !IV_SEARCH_STRING type STRING
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITYSET optional
     exporting
-      !ET_ENTITYSET type /CADAXO/CL_MDS_MPC=>TT_ANNOTATION
+      !ET_ENTITYSET type ZCL_MDS_MPC=>TT_ANNOTATION
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_CONTEXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -530,7 +530,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_ANNOTATION
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_ANNOTATION
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -544,7 +544,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_DASHBOARDCARDOBJECTLASTCHAN
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_DASHBOARDCARDOBJECTLASTCHAN
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -569,7 +569,7 @@ protected section.
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITY optional
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_DASHBOARDCARDOBJECTLASTCHAN
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_DASHBOARDCARDOBJECTLASTCHAN
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_ENTITY_CNTXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -588,7 +588,7 @@ protected section.
       !IV_SEARCH_STRING type STRING
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITYSET optional
     exporting
-      !ET_ENTITYSET type /CADAXO/CL_MDS_MPC=>TT_DASHBOARDCARDOBJECTLASTCHAN
+      !ET_ENTITYSET type ZCL_MDS_MPC=>TT_DASHBOARDCARDOBJECTLASTCHAN
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_CONTEXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -603,7 +603,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_DASHBOARDCARDOBJECTLASTCHAN
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_DASHBOARDCARDOBJECTLASTCHAN
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -617,7 +617,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_DASHBOARDCARDOBJECT
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_DASHBOARDCARDOBJECT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -642,7 +642,7 @@ protected section.
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITY optional
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_DASHBOARDCARDOBJECT
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_DASHBOARDCARDOBJECT
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_ENTITY_CNTXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -661,7 +661,7 @@ protected section.
       !IV_SEARCH_STRING type STRING
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITYSET optional
     exporting
-      !ET_ENTITYSET type /CADAXO/CL_MDS_MPC=>TT_DASHBOARDCARDOBJECT
+      !ET_ENTITYSET type ZCL_MDS_MPC=>TT_DASHBOARDCARDOBJECT
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_CONTEXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -676,7 +676,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_DASHBOARDCARDOBJECT
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_DASHBOARDCARDOBJECT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -690,7 +690,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_DASHBOARDCARDSTANDARDOBJEC
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_DASHBOARDCARDSTANDARDOBJEC
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -715,7 +715,7 @@ protected section.
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITY optional
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_DASHBOARDCARDSTANDARDOBJEC
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_DASHBOARDCARDSTANDARDOBJEC
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_ENTITY_CNTXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -734,7 +734,7 @@ protected section.
       !IV_SEARCH_STRING type STRING
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITYSET optional
     exporting
-      !ET_ENTITYSET type /CADAXO/CL_MDS_MPC=>TT_DASHBOARDCARDSTANDARDOBJEC
+      !ET_ENTITYSET type ZCL_MDS_MPC=>TT_DASHBOARDCARDSTANDARDOBJEC
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_CONTEXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -749,7 +749,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_DASHBOARDCARDSTANDARDOBJEC
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_DASHBOARDCARDSTANDARDOBJEC
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -763,7 +763,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_DASHBOARDCARDSTANDARDOBJECT
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_DASHBOARDCARDSTANDARDOBJECT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -788,7 +788,7 @@ protected section.
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITY optional
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_DASHBOARDCARDSTANDARDOBJECT
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_DASHBOARDCARDSTANDARDOBJECT
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_ENTITY_CNTXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -807,7 +807,7 @@ protected section.
       !IV_SEARCH_STRING type STRING
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITYSET optional
     exporting
-      !ET_ENTITYSET type /CADAXO/CL_MDS_MPC=>TT_DASHBOARDCARDSTANDARDOBJECT
+      !ET_ENTITYSET type ZCL_MDS_MPC=>TT_DASHBOARDCARDSTANDARDOBJECT
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_CONTEXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -822,7 +822,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_DASHBOARDCARDSTANDARDOBJECT
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_DASHBOARDCARDSTANDARDOBJECT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -836,7 +836,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_DATASOURCE
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_DATASOURCE
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -861,7 +861,7 @@ protected section.
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITY optional
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_DATASOURCE
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_DATASOURCE
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_ENTITY_CNTXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -880,7 +880,7 @@ protected section.
       !IV_SEARCH_STRING type STRING
       !IO_TECH_REQUEST_CONTEXT type ref to /IWBEP/IF_MGW_REQ_ENTITYSET optional
     exporting
-      !ET_ENTITYSET type /CADAXO/CL_MDS_MPC=>TT_DATASOURCE
+      !ET_ENTITYSET type ZCL_MDS_MPC=>TT_DATASOURCE
       !ES_RESPONSE_CONTEXT type /IWBEP/IF_MGW_APPL_SRV_RUNTIME=>TY_S_MGW_RESPONSE_CONTEXT
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
@@ -895,7 +895,7 @@ protected section.
       !IT_NAVIGATION_PATH type /IWBEP/T_MGW_NAVIGATION_PATH
       !IO_DATA_PROVIDER type ref to /IWBEP/IF_MGW_ENTRY_PROVIDER optional
     exporting
-      !ER_ENTITY type /CADAXO/CL_MDS_MPC=>TS_DATASOURCE
+      !ER_ENTITY type ZCL_MDS_MPC=>TS_DATASOURCE
     raising
       /IWBEP/CX_MGW_BUSI_EXCEPTION
       /IWBEP/CX_MGW_TECH_EXCEPTION .
@@ -907,7 +907,7 @@ ENDCLASS.
 
 
 
-CLASS /CADAXO/CL_MDS_DPC IMPLEMENTATION.
+CLASS ZCL_MDS_DPC IMPLEMENTATION.
 
 
   method /IWBEP/IF_MGW_APPL_SRV_RUNTIME~CREATE_ENTITY.
@@ -917,7 +917,7 @@ CLASS /CADAXO/CL_MDS_DPC IMPLEMENTATION.
 *&*
 *&*       WARNING--> NEVER MODIFY THIS CLASS <--WARNING
 *&*   If you want to change the DPC implementation, use the
-*&*   generated methods inside the DPC provider subclass - /CADAXO/CL_MDS_DPC_EXT
+*&*   generated methods inside the DPC provider subclass - ZCL_MDS_DPC_EXT
 *&-----------------------------------------------------------------------------------------------*
 
  DATA dashboardcards01_create_entity TYPE zcl_mds_mpc=>ts_dashboardcardstandardobjec.
@@ -1236,7 +1236,7 @@ ENDCASE.
 *&*
 *&*       WARNING--> NEVER MODIFY THIS CLASS <--WARNING
 *&*   If you want to change the DPC implementation, use the
-*&*   generated methods inside the DPC provider subclass - /CADAXO/CL_MDS_DPC_EXT
+*&*   generated methods inside the DPC provider subclass - ZCL_MDS_DPC_EXT
 *&-----------------------------------------------------------------------------------------------*
 
  DATA lv_entityset_name TYPE string.
@@ -1432,7 +1432,7 @@ CASE lv_entityset_name.
 *&*
 *&*       WARNING--> NEVER MODIFY THIS CLASS <--WARNING
 *&*   If you want to change the DPC implementation, use the
-*&*   generated methods inside the DPC provider subclass - /CADAXO/CL_MDS_DPC_EXT
+*&*   generated methods inside the DPC provider subclass - ZCL_MDS_DPC_EXT
 *&-----------------------------------------------------------------------------------------------*
 
  DATA datasources_get_entity TYPE zcl_mds_mpc=>ts_datasource.
@@ -1812,7 +1812,7 @@ CASE lv_entityset_name.
 *&*
 *&*       WARNING--> NEVER MODIFY THIS CLASS <--WARNING
 *&*   If you want to change the DPC implementation, use the
-*&*   generated methods inside the DPC provider subclass - /CADAXO/CL_MDS_DPC_EXT
+*&*   generated methods inside the DPC provider subclass - ZCL_MDS_DPC_EXT
 *&-----------------------------------------------------------------------------------------------*
  DATA datasources_get_entityset TYPE zcl_mds_mpc=>tt_datasource.
  DATA dashboardcards01_get_entityset TYPE zcl_mds_mpc=>tt_dashboardcardstandardobjec.
@@ -2218,7 +2218,7 @@ CASE lv_entityset_name.
 *&*
 *&*       WARNING--> NEVER MODIFY THIS CLASS <--WARNING
 *&*   If you want to change the DPC implementation, use the
-*&*   generated methods inside the DPC provider subclass - /CADAXO/CL_MDS_DPC_EXT
+*&*   generated methods inside the DPC provider subclass - ZCL_MDS_DPC_EXT
 *&-----------------------------------------------------------------------------------------------*
 
  DATA rootdatasources_update_entity TYPE zcl_mds_mpc=>ts_rootdatasource.
