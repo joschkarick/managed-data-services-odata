@@ -4,12 +4,12 @@
   <asx:values>
    <URL>/sap/opu/odata/mds</URL>
    <ICFSERVICE>
-    <ICF_NAME>CADAXO</ICF_NAME>
+    <ICF_NAME>MDS</ICF_NAME>
     <ICFCHILDNO>1</ICFCHILDNO>
-    <ORIG_NAME>cadaxo</ORIG_NAME>
+    <ORIG_NAME>mds</ORIG_NAME>
    </ICFSERVICE>
    <ICFDOCU>
-    <ICF_NAME>CADAXO</ICF_NAME>
+    <ICF_NAME>MDS</ICF_NAME>
     <ICF_LANGU>E</ICF_LANGU>
     <ICF_DOCU>Namespace</ICF_DOCU>
    </ICFDOCU>
