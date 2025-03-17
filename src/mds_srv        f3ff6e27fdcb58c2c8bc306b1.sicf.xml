@@ -2,7 +2,7 @@
 <abapGit version="v1.0.0" serializer="LCL_OBJECT_SICF" serializer_version="v1.0.0">
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
-   <URL>/sap/opu/odatamdsmds_srv/</URL>
+   <URL>/sap/opu/odata/mds/mds_srv/</URL>
    <ICFSERVICE>
     <ICF_NAME>MDS_SRV</ICF_NAME>
     <ORIG_NAME>mds_srv</ORIG_NAME>
